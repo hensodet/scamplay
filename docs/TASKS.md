@@ -30,6 +30,9 @@
 - [x] M2A Remediation: Document content versioning, stable identifiers, state transitions, and attempt preservation (docs/CONTENT_VERSIONING.md).
 - [x] M2A Remediation: Static verification and contract alignment test executed (tests/verify_m2a_offline.mjs: 18/18 passed).
 - [x] M2A Remediation: Create live PostgREST test runner measuring round-trip latency and verifying anon access (tests/verify_m2a_live.mjs).
+- [x] M2A Preflight: Configure project-local Supabase CLI 3.2.0 and generate supabase/config.toml.
+- [ ] Authenticate CLI and link to development project 'scamplay-dev'.
+- [ ] Run dry-run migration check (supabase db push --dry-run).
 - [ ] Connect development Supabase project in Singapore and execute migrations 01, 02, 03.
 - [ ] Execute tests/sql/m2a_verification_suite.sql in development database.
 - [ ] Obtain written user approval for M2B.

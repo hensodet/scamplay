@@ -18,11 +18,17 @@ Completed in M2A Remediation:
 - Documentation:
   - Created `docs/CONTENT_VERSIONING.md` documenting stable identifier strategy, state machine transitions, immutable version snapshots, and historical attempt preservation.
   - Updated `docs/SUPABASE_SETUP_GUIDE.md` with step-by-step guidance for project creation and migration execution.
+- Tooling Preflight:
+  - Project-local Supabase CLI 3.2.0 installed in root `package.json` (`devDependencies`).
+  - Executed `supabase init` generating version-controlled `supabase/config.toml`.
+  - Added `.supabase_home/`, `.temp/`, and `supabase/.temp/` to `.gitignore`.
 
 Pending actions for live database verification:
-1. Confirm whether user has an existing Supabase development project or guide project creation in Singapore (`ap-southeast-1`).
-2. Apply migrations `01`, `02`, `03` in development database.
-3. Run `tests/sql/m2a_verification_suite.sql` in development database SQL editor.
-4. Execute `node tests/verify_m2a_live.mjs` to benchmark latency and verify PostgREST security.
+1. Complete `npx supabase login` and project linking (`npx supabase link --project-ref <ref>`).
+2. Run non-mutating dry-run verification (`npx supabase db push --dry-run`).
+3. Obtain explicit user approval before applying migrations.
+4. Apply migrations `01`, `02`, `03` in development database.
+5. Run `tests/sql/m2a_verification_suite.sql` in development database.
+6. Execute `node tests/verify_m2a_live.mjs` to benchmark latency and verify PostgREST security.
 
-Next gate: M2A Live Database Verification Sign-off, followed by M2B Approval.
+Next gate: M2A Migration Execution Approval, followed by M2B.
