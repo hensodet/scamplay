@@ -34,8 +34,10 @@ GRANT SELECT ON TABLE
   public.scenario_versions
 TO anon, authenticated;
 
--- Allow execution of trigger functions for timestamp tracking
-GRANT EXECUTE ON FUNCTION public.set_updated_at() TO anon, authenticated, service_role;
+-- Revoke EXECUTE on trigger functions from untrusted client roles (anon, authenticated, public)
+-- Only service_role and backend processes performing updates execute triggers
+REVOKE EXECUTE ON FUNCTION public.set_updated_at() FROM public, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.set_updated_at() TO service_role;
 
 -- CRITICAL SECURITY RULE: NO INSERT, UPDATE, DELETE permissions are granted to anon or authenticated clients.
 -- Authenticated users do NOT automatically receive administrative rights.
@@ -82,12 +84,37 @@ USING (
 );
 
 -- 5. RLS Policies: media_assets
--- Only approved media assets are readable
+-- Only approved media assets referenced by published scenarios or coming_soon cards are readable
+-- Prevents leaking media attached to draft scenarios, archived cases, or unreviewed assets
 CREATE POLICY "anon_select_media_assets"
 ON public.media_assets
 FOR SELECT
 TO anon, authenticated
-USING (review_status = 'approved');
+USING (
+  review_status = 'approved'
+  AND (
+    EXISTS (
+      SELECT 1 FROM public.scenarios s
+      WHERE s.cover_media_id = media_assets.id
+        AND s.status IN ('published', 'coming_soon')
+    )
+    OR
+    EXISTS (
+      SELECT 1 FROM public.scenario_steps ss
+      JOIN public.scenarios s ON s.id = ss.scenario_id
+      WHERE ss.media_asset_id = media_assets.id
+        AND s.status = 'published'
+    )
+    OR
+    EXISTS (
+      SELECT 1 FROM public.step_localizations sl
+      JOIN public.scenario_steps ss ON ss.id = sl.step_id
+      JOIN public.scenarios s ON s.id = ss.scenario_id
+      WHERE sl.narration_media_id = media_assets.id
+        AND s.status = 'published'
+    )
+  )
+);
 
 -- 6. RLS Policies: media_localizations
 CREATE POLICY "anon_select_media_localizations"
@@ -98,7 +125,6 @@ USING (
   EXISTS (
     SELECT 1 FROM public.media_assets ma
     WHERE ma.id = media_localizations.media_asset_id
-      AND ma.review_status = 'approved'
   )
 );
 
@@ -215,7 +241,6 @@ BEGIN
       AND EXISTS (
         SELECT 1 FROM public.media_assets ma
         WHERE ma.storage_path = storage.objects.name
-          AND ma.review_status = 'approved'
       )
     );
   END IF;

@@ -319,17 +319,28 @@ BEGIN
   RAISE NOTICE '  [PASS] %: Authenticated clients have zero write access and cannot see drafts.', v_test_name;
 
   ----------------------------------------------------------------------------
-  -- TEST 9: Media Asset Access Control (review_status filtering)
+  -- TEST 9: Media Asset Access Control & Trigger Execution Denial
   ----------------------------------------------------------------------------
-  v_test_name := 'TEST 9: Media Asset Access Control';
+  v_test_name := 'TEST 9a: Trigger Function Execution Denial for Untrusted Roles';
   SET LOCAL ROLE anon;
+  v_err_caught := FALSE;
+  BEGIN
+    PERFORM public.set_updated_at();
+  EXCEPTION WHEN insufficient_privilege THEN
+    v_err_caught := TRUE;
+  END;
+  IF NOT v_err_caught THEN
+    RAISE EXCEPTION '% FAILED: Anonymous client was able to execute set_updated_at() trigger function!', v_test_name;
+  END IF;
+  RAISE NOTICE '  [PASS] %: Untrusted roles cannot execute internal trigger functions.', v_test_name;
 
-  -- Approved media must be readable
+  v_test_name := 'TEST 9b: Media Asset Access Control (Publication & Review Filtering)';
+  -- Approved media linked to published scenario must be readable
   SELECT count(*) INTO v_count
   FROM public.media_assets
   WHERE id = 'b0000000-0000-4000-8000-000000000001' AND review_status = 'approved';
   IF v_count <> 1 THEN
-    RAISE EXCEPTION '% FAILED: Approved media asset not readable by anon role.', v_test_name;
+    RAISE EXCEPTION '% FAILED: Approved media asset linked to published scenario not readable by anon role.', v_test_name;
   END IF;
 
   -- Unreviewed / Pending media must NOT be readable
@@ -339,7 +350,7 @@ BEGIN
   IF v_count <> 0 THEN
     RAISE EXCEPTION '% FAILED: Pending review media leaked to anon role! Found % rows.', v_test_name, v_count;
   END IF;
-  RAISE NOTICE '  [PASS] %: Only approved media assets readable by anon.', v_test_name;
+  RAISE NOTICE '  [PASS] %: Only approved media assets linked to active scenarios are readable by anon.', v_test_name;
 
   ----------------------------------------------------------------------------
   -- TEST 10: Bilingual Data Completeness Verification
