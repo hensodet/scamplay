@@ -1,0 +1,45 @@
+{
+  "demo_only": true,
+  "cards": [
+    {
+      "id": "telegram-messenger-takeover",
+      "status": "playable_after_M4",
+      "cover": "PLACEHOLDER",
+      "titles": {
+        "km": "ល្បិចបោកយកគណនី Telegram",
+        "en": "Telegram Account Takeover"
+      },
+      "estimated_minutes": 6
+    },
+    {
+      "id": "fake-online-store",
+      "status": "coming_soon",
+      "cover": "PLACEHOLDER",
+      "titles": {
+        "km": "ល្បិចហាងអនឡាញក្លែងក្លាយ",
+        "en": "Fake Online Shop"
+      },
+      "estimated_minutes": 6
+    },
+    {
+      "id": "bank-impersonation",
+      "status": "coming_soon",
+      "cover": "PLACEHOLDER",
+      "titles": {
+        "km": "ល្បិចក្លែងបន្លំធនាគារ",
+        "en": "Bank Impersonation"
+      },
+      "estimated_minutes": 5
+    },
+    {
+      "id": "fake-investment",
+      "status": "coming_soon",
+      "cover": "PLACEHOLDER",
+      "titles": {
+        "km": "ល្បិចវិនិយោគក្លែងក្លាយ",
+        "en": "Fake Investment"
+      },
+      "estimated_minutes": 7
+    }
+  ]
+}

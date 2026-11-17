@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ScamPlayManifest",
+  "type": "object",
+  "required": ["scenarios", "generated_at"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "status", "updated_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "version": { "type": "integer" },
+          "status": { "type": "string" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

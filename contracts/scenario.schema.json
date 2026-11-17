@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ScamPlayScenario",
+  "type": "object",
+  "required": ["id", "version", "status", "category", "estimated_minutes", "localizations", "steps"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "status": { "type": "string", "enum": ["draft", "published", "archived", "demo_unreviewed"] },
+    "category": { "type": "string" },
+    "estimated_minutes": { "type": "integer", "minimum": 1 },
+    "cover": {
+      "type": "object",
+      "properties": {
+        "asset_path": { "type": "string" },
+        "alt": {
+          "type": "object",
+          "required": ["km", "en"],
+          "properties": {
+            "km": { "type": "string" },
+            "en": { "type": "string" }
+          }
+        }
+      }
+    },
+    "localizations": {
+      "type": "object",
+      "required": ["km", "en"],
+      "properties": {
+        "km": {
+          "type": "object",
+          "required": ["title", "summary", "intro", "closing"],
+          "properties": {
+            "title": { "type": "string" },
+            "summary": { "type": "string" },
+            "intro": { "type": "string" },
+            "closing": { "type": "string" }
+          }
+        },
+        "en": {
+          "type": "object",
+          "required": ["title", "summary", "intro", "closing"],
+          "properties": {
+            "title": { "type": "string" },
+            "summary": { "type": "string" },
+            "intro": { "type": "string" },
+            "closing": { "type": "string" }
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "order", "text"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "type": "string", "enum": ["story", "decision", "feedback"] },
+          "order": { "type": "integer" },
+          "text": {
+            "type": "object",
+            "required": ["km", "en"],
+            "properties": {
+              "km": { "type": "string" },
+              "en": { "type": "string" }
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "score", "labels", "feedback"],
+              "properties": {
+                "id": { "type": "string" },
+                "score": { "type": "integer" },
+                "labels": {
+                  "type": "object",
+                  "required": ["km", "en"],
+                  "properties": {
+                    "km": { "type": "string" },
+                    "en": { "type": "string" }
+                  }
+                },
+                "feedback": {
+                  "type": "object",
+                  "required": ["km", "en"],
+                  "properties": {
+                    "km": { "type": "string" },
+                    "en": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

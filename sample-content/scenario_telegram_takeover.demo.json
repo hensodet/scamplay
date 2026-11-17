@@ -1,0 +1,158 @@
+{
+  "id": "telegram-messenger-takeover",
+  "version": 1,
+  "status": "demo_unreviewed",
+  "category": "account_takeover",
+  "estimated_minutes": 6,
+  "cover": {
+    "asset_path": "PLACEHOLDER_NOT_PROVIDED",
+    "alt": {
+      "km": "រូបតំណាងសុវត្ថិភាពគណនី Telegram",
+      "en": "Telegram account security illustration"
+    }
+  },
+  "localizations": {
+    "km": {
+      "title": "ល្បិចបោកយកគណនី Telegram",
+      "summary": "ស្វែងយល់ពីសារក្លែងបន្លំតាម Messenger ដែលព្យាយាមយកលេខកូដចូល Telegram។",
+      "intro": "អ្នកទទួលបានសារពីគណនី Messenger មួយដែលមើលទៅដូចជាមិត្តភក្តិរបស់អ្នក។",
+      "closing": "កុំចែករំលែកលេខកូដចូលគណនី។ ផ្ទៀងផ្ទាត់ការស្នើសុំតាមមធ្យោបាយទំនាក់ទំនងដែលអ្នកទុកចិត្ត។"
+    },
+    "en": {
+      "title": "Telegram Account Takeover Trick",
+      "summary": "Learn how Messenger impersonators try to steal Telegram login codes.",
+      "intro": "You receive a Messenger message from an account that appears to belong to a friend.",
+      "closing": "Never share account login codes. Verify unusual requests through a separate trusted channel."
+    }
+  },
+  "steps": [
+    {
+      "id": "story-01",
+      "kind": "story",
+      "order": 1,
+      "text": {
+        "km": "សារ​មួយនិយាយថា៖ «ខ្ញុំមានបញ្ហាបន្ទាន់ សូមជួយខ្ញុំបន្តិច!»",
+        "en": "A message says: “I have an urgent problem. Can you help me?”"
+      },
+      "audio": {
+        "km": null,
+        "en": null
+      }
+    },
+    {
+      "id": "decision-01",
+      "kind": "decision",
+      "order": 2,
+      "text": {
+        "km": "មនុស្សនោះសុំលេខកូដចូល Telegram ដែលអ្នកទើបតែទទួល។ តើអ្នកគួរធ្វើអ្វី?",
+        "en": "The sender asks for the Telegram login code you just received. What should you do?"
+      },
+      "options": [
+        {
+          "id": "share",
+          "score": 0,
+          "labels": {
+            "km": "ផ្ញើលេខកូដឱ្យគាត់",
+            "en": "Send them the code"
+          },
+          "feedback": {
+            "km": "នេះមានហានិភ័យខ្ពស់។ ការចែករំលែកលេខកូដអាចឱ្យអ្នកផ្សេងចូលគណនីរបស់អ្នកបាន។",
+            "en": "High risk. Sharing a login code can let someone else access your account."
+          }
+        },
+        {
+          "id": "verify",
+          "score": 1,
+          "labels": {
+            "km": "ទាក់ទងមិត្តភក្តិតាមមធ្យោបាយផ្សេងដែលទុកចិត្តបាន",
+            "en": "Verify with your friend using a separate trusted channel"
+          },
+          "feedback": {
+            "km": "ជាជម្រើសមានសុវត្ថិភាពជាង។ កុំផ្ញើលេខកូដ ទោះបីមើលទៅជាមិត្តភក្តិក៏ដោយ។",
+            "en": "A safer choice. Never share the code, even if the message looks like it came from a friend."
+          }
+        },
+        {
+          "id": "ignore",
+          "score": 1,
+          "labels": {
+            "km": "មិនផ្ញើលេខកូដ ហើយបិទការសន្ទនា",
+            "en": "Do not send the code and close the conversation"
+          },
+          "feedback": {
+            "km": "ការមិនផ្ញើលេខកូដជួយការពារគណនី។ ការផ្ទៀងផ្ទាត់តាមផ្លូវផ្សេងក៏អាចជួយបញ្ជាក់ថាមិត្តភក្តិត្រូវបានក្លែងបន្លំឬអត់។",
+            "en": "Not sharing the code protects your account. Independent verification can also reveal impersonation."
+          }
+        }
+      ],
+      "audio": {
+        "km": null,
+        "en": null
+      }
+    },
+    {
+      "id": "story-02",
+      "kind": "story",
+      "order": 3,
+      "text": {
+        "km": "អ្នកផ្ញើសារបន្តថា៖ «សូមផ្ញើឱ្យលឿន! បើមិនដូច្នោះទេ ខ្ញុំនឹងមានបញ្ហាធំ!»",
+        "en": "The sender adds: “Please hurry! I will be in serious trouble if you delay!”"
+      },
+      "audio": {
+        "km": null,
+        "en": null
+      }
+    },
+    {
+      "id": "decision-02",
+      "kind": "decision",
+      "order": 4,
+      "text": {
+        "km": "អ្នកផ្ញើបន្តដាក់សម្ពាធ។ តើអ្នកគួរធ្វើអ្វីបន្ទាប់?",
+        "en": "The sender keeps pressuring you. What should you do next?"
+      },
+      "options": [
+        {
+          "id": "rush",
+          "score": 0,
+          "labels": {
+            "km": "ផ្ញើលេខកូដព្រោះគាត់ថាបន្ទាន់",
+            "en": "Share the code because it is urgent"
+          },
+          "feedback": {
+            "km": "ការបង្កើតភាពបន្ទាន់គឺជាល្បិចទូទៅ។ កុំបង្ហាញលេខកូដចូលគណនី។",
+            "en": "Urgency is a common manipulation tactic. Do not reveal login codes."
+          }
+        },
+        {
+          "id": "check",
+          "score": 1,
+          "labels": {
+            "km": "ឈប់ឆ្លើយ ហើយផ្ទៀងផ្ទាត់អត្តសញ្ញាណអ្នកផ្ញើ",
+            "en": "Pause and verify the sender independently"
+          },
+          "feedback": {
+            "km": "ល្អ! ការផ្ទៀងផ្ទាត់ដោយឡែក និងការមិនចែករំលែកលេខកូដជាការឆ្លើយតបមានសុវត្ថិភាព។",
+            "en": "Good! Independent verification without sharing the code is a safer response."
+          }
+        },
+        {
+          "id": "link",
+          "score": 0,
+          "labels": {
+            "km": "ចុចតំណភ្ជាប់ដែលគាត់ផ្ញើ ដើម្បីពិនិត្យ",
+            "en": "Open the link they sent to check"
+          },
+          "feedback": {
+            "km": "តំណដែលអ្នកមិនទុកចិត្តអាចនាំទៅកាន់ទំព័រក្លែងក្លាយ។ ប្រើកម្មវិធីផ្លូវការ និងឆានែលផ្ទៀងផ្ទាត់ដែលទុកចិត្ត។",
+            "en": "Untrusted links can lead to phishing pages. Use official apps and trusted verification channels."
+          }
+        }
+      ],
+      "audio": {
+        "km": null,
+        "en": null
+      }
+    }
+  ]
+}

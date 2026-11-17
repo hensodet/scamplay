@@ -1,0 +1,29 @@
+{
+  "demo_only": true,
+  "news": [
+    {
+      "id": "demo-news-01",
+      "status": "fictional_demo_not_real_news",
+      "title": {
+        "km": "គំរូសារអប់រំ៖ កុំចែករំលែកលេខកូដចូលគណនី",
+        "en": "Demo: Do Not Share Login Codes"
+      },
+      "source_url": null,
+      "published_at": null,
+      "image_asset": null
+    }
+  ],
+  "videos": [
+    {
+      "id": "demo-video-01",
+      "status": "placeholder_no_video_file",
+      "title": {
+        "km": "វីដេអូគំរូ៖ ការពារគណនី",
+        "en": "Demo: Protect Your Account"
+      },
+      "video_asset": null,
+      "thumbnail_asset": null,
+      "license_status": "not_yet_provided"
+    }
+  ]
+}

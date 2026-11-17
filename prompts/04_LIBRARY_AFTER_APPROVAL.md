@@ -1,0 +1,3 @@
+# M3 — use ONLY after separate explicit approval for M3
+
+Implement the Khmer-first, English-complete Flutter landing/home screen and visually rich Scenario Library. Show four illustrated cards using rights-cleared images or clearly marked placeholders: first Telegram/Messenger takeover playable entry, other three clearly Coming Soon / disabled. Add language switcher, offline/loading/error states and accessible navigation. Use approved PostgreSQL content and SQLite cached data, not hardcoded localized card labels. Test on available Android emulator/handset. Do not build admin or news/video functionality yet. STOP for M4 approval.

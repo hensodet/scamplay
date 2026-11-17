@@ -1,0 +1,3 @@
+# M4 — use ONLY after separate explicit approval for M4
+
+Implement the reviewed bilingual Telegram/Facebook account-takeover scenario using stable scenario/step/option IDs and approved script. Render fictional chat/story visuals, at least two decision steps, selected option feedback, local provisional scoring, lesson summary and replay. User-triggered narration if actual licensed files are available; otherwise clearly label audio as unavailable, keep accessible text, and do not claim audio complete. Save guest progress locally; verify offline/restart behavior, safe content and tests. Do not add admin, live AI Lab, or production deployment. STOP for M5A approval.
