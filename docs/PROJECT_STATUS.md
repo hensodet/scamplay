@@ -1,50 +1,59 @@
-# Project status (M2B Completed & Fully Verified)
+# Project status (M3 Completed & Fully Verified)
 
 Date: 2026-11-18
-Current milestone: M2B (Flutter Local SQLite/Drift Integration and Offline Data Management) — COMPLETED & FULLY VERIFIED
-Approved actions: Drift 2.31 SQLite schema mirroring 11 remote tables + local guest attempts, app preferences, and sync metadata; build_runner code generation; ContentRepository with bilingual card and detail queries; SyncService for read-only Supabase synchronization with bilingual completeness validation and atomic transaction updates; language switcher persistence; unit/sync/widget tests; debug APK build; physical device verification on ALI NX1 (online sync, bilingual toggle, persistent cold reboot, offline airplane mode).
-Unapproved actions: Starting M3 (Scenario Library UI design/overhaul), building M4 gameplay interactions, building admin dashboard, creating production databases, cloud progress upload.
+Current milestone: M3 (Bilingual Scenario Library UI, Illustrated Cards, and Scenario Discovery) — COMPLETED & FULLY VERIFIED
+Approved actions: Bilingual Scenario Library UI with mobile-first card layout; rights-neutral vector illustration system (`ScenarioCoverIllustration`); interactive `ComingSoonSheet` pedagogical review modal; `ScenarioCardWidget` with category, duration, status badges, and accessibility semantics; `ScenarioDetailScreen` preview with learning objectives, step breakdown, and disabled M4 gameplay trigger; horizontal category filter pills; offline cache indicator banner; pull-to-refresh sync; automated unit/sync/widget testing (15/15 passed); static analysis (0 issues); debug APK build (94.5s); physical Android handset verification on ALI NX1 (Khmer, English, Telegram detail preview, Coming Soon modal, and Airplane Mode offline cold-start).
+Unapproved actions: Starting M4 (Interactive simulation engine, decision branching, scoring logic, narration audio), building admin dashboard, creating production databases, cloud progress upload.
 
-Completed in M2B:
-- Local Drift 2.31 SQLite Architecture:
-  - Integrated `drift: ^2.24.2`, `drift_flutter: ^0.2.4`, `sqlite3_flutter_libs: ^0.5.42`, `path_provider: ^2.1.6`, and `http: ^1.6.0`.
-  - Implemented 8 modular table definitions in `apps/mobile/lib/data/local/tables/`:
-    - `CachedScenarioCategories`, `CachedScenarioCategoryLocalizations`
-    - `CachedMediaAssets`, `CachedMediaLocalizations`
-    - `CachedScenarios`, `CachedScenarioLocalizations`
-    - `CachedScenarioSteps`, `CachedStepLocalizations`
-    - `CachedAnswerOptions`, `CachedAnswerLocalizations`
-    - `GuestAttempts` (attemptId, scenarioId, scenarioVersion, answersJson, scoreLocal, completed, completedAt, createdAt, updatedAt)
-    - `AppPreferences` (key, value, updatedAt)
-    - `SyncMetadata` (key, value, lastSyncedAt)
-  - Generated Drift database implementation via `build_runner` (`app_database.g.dart`) with PRAGMA foreign_keys = ON.
-- Content Repository & Local Progress (`apps/mobile/lib/data/repositories/content_repository.dart`):
-  - Bilingual card queries joining categories, scenarios, and localizations.
-  - Complete hierarchical scenario detail queries (scenarios -> steps -> options with localized labels and feedback).
-  - Guest attempt tracking: local provisional scores, completion flags, and JSON answers stored safely on-device without network transmission.
-  - Language preference management defaulting to Khmer (`km`), supporting English (`en`), and persisting across app lifecycles.
-- Read-Only Supabase Synchronization (`apps/mobile/lib/data/sync/sync_service.dart`):
-  - Fetches published scenarios and approved coming-soon cards using public anon key only.
-  - Strict bilingual completeness validation: rejects payloads if either Khmer (`km`) or English (`en`) translations are missing.
-  - Atomic cache updates: clears and repopulates cache tables inside a single Drift SQLite transaction (`db.transaction`).
-  - Strict isolation: `GuestAttempts` and `AppPreferences` are completely decoupled and preserved across content updates or sync failures.
-  - Resilient error handling: network timeouts and HTTP errors roll back cleanly, leaving previous valid cache intact.
+Completed in M3:
+- Mobile-First Scenario Library UI (`apps/mobile/lib/app.dart`):
+  - Displays all 4 approved scenarios from local Drift SQLite database (`telegram-messenger-takeover`, `fake-online-store`, `bank-impersonation`, `fake-investment`).
+  - Horizontal category filtering pills allowing instant filtering by scenario category or resetting to "All" (`ទាំងអស់` / `All`).
+  - Offline sync status indicator banner displaying timestamp of cached content and connectivity state.
+  - Independent educational prototype notice banner emphasizing digital fraud awareness and social engineering safety.
+  - Pull-to-refresh integration triggering read-only PostgREST sync with visual spinner.
+- Rights-Neutral Vector Illustration System (`apps/mobile/lib/ui/widgets/scenario_cover_illustration.dart`):
+  - Coherent geometric vector illustration headers themed by scam category:
+    - Account Takeover: Modern blue gradient shield and chat bubble badge.
+    - Fake Online Store: Warm amber/orange gradient shopping bag and warning badge.
+    - Bank Impersonation: Deep teal/emerald gradient classical bank pillar and phone badge.
+    - Fake Investment: Royal indigo/purple gradient trending growth chart and dollar badge.
+  - 100% original, vector-drawn in Flutter; strictly avoids proprietary logos (no Telegram, Facebook, commercial bank, or police insignia) to ensure full rights clearance and prevent perceived official endorsement.
+  - Zero image load latency and sharp rendering across all screen densities offline.
+- Illustrated Scenario Cards (`apps/mobile/lib/ui/widgets/scenario_card_widget.dart`):
+  - Rounded cards with category pill, duration badge, localized title, summary, and action hint.
+  - Clear visual distinction between previewable scenario (`អាចមើលគំរូបាន` / `Preview Available`) and coming soon scenarios (`មកដល់ឆាប់ៗ` / `Coming Soon`).
+  - Stable widget keys and semantic accessibility labels (`Semantics`) for screen readers.
+- Coming Soon Pedagogical Review Modal (`apps/mobile/lib/ui/widgets/coming_soon_sheet.dart`):
+  - Modal bottom sheet triggered when tapping any Coming Soon card.
+  - Features the category illustration, title, description, and educational notice explaining that the scenario is currently undergoing pedagogical review and interactive storyline design, avoiding launching unfinished gameplay.
+- Scenario Detail & Preview Screen (`apps/mobile/lib/ui/screens/scenario_detail_screen.dart`):
+  - Complete preview page for the primary scenario (`telegram-messenger-takeover`).
+  - Displays cover illustration, category, duration, scenario intro narrative callout, learning objectives list (`អ្វីដែលអ្នកនឹងរៀន`), and multi-step structure breakdown (`រចនាសម្ព័ន្ធមេរៀន`).
+  - Prominently features a disabled action button (`ការអនុវត្តសាច់រឿងជាក់ស្តែង (ចាប់ផ្តើមក្នុង M4)` / `Interactive Practice (Coming in M4)`) to enforce the M3 boundary before gameplay logic is approved in M4.
 - Automated Testing Suite:
   - `flutter analyze`: 0 errors, 0 warnings across all application and test files.
-  - `flutter test`: **10/10 tests PASSED** in 4s:
-    - 5/5 database and repository tests (CRUD, foreign keys, language persistence, attempt preservation).
-    - 4/4 sync service tests (successful atomic sync, bilingual validation failure, HTTP 500 rollback, attempt preservation).
-    - 1/1 widget test verifying UI rendering, bilingual switcher toggle, and database persistence.
+  - `flutter test`: **15/15 tests PASSED** in 17s across all 4 test suites:
+    - `database_test.dart`: 5/5 tests passed.
+    - `sync_test.dart`: 4/4 tests passed.
+    - `widget_test.dart`: 1/1 test passed.
+    - `scenario_library_test.dart`: 5/5 tests passed (Khmer rendering, English toggle with exact 1-to-1 card matching, detail screen navigation, coming-soon modal dismissal, and category filtering).
 - Production-Ready Debug Build:
-  - `flutter build apk --debug` succeeded cleanly (exit code 0; `app-debug.apk`, 189 MB).
+  - `flutter build apk --debug` succeeded cleanly in 94.5s (`app-debug.apk`).
 - Physical Handset Verification (`ALI NX1`, `AWCXUT4115006583`, Android 15, API 35):
-  - Successfully installed APK via ADB.
-  - Online sync executed on initial launch: fetched and cached 4 scenarios from remote Supabase development database `scamplay-dev`.
-  - Bilingual toggle verified: instantly switched UI between Khmer and English with full text parity.
-  - Cold reboot persistence verified: app force-stopped and re-launched; restored directly into previously selected English locale from SQLite `AppPreferences`.
-  - Offline mode verified: device placed in Airplane Mode; app cold-booted offline and rendered all 4 scenario cards directly from local Drift SQLite cache without network.
+  - Successfully installed APK and verified all 5 key user journeys with physical screenshots:
+    1. Khmer Scenario Library (`scamplay_m3_device_library_km.png`).
+    2. English Scenario Library (`scamplay_m3_device_library_en.png`).
+    3. Telegram Scenario Preview / Detail Screen (`scamplay_m3_device_detail_preview.png`).
+    4. Coming Soon Bottom Sheet Modal (`scamplay_m3_device_coming_soon_sheet.png`).
+    5. Offline Library State in Airplane Mode (`scamplay_m3_device_offline_library.png`).
+
+Completed in M2B:
+- Local Drift 2.31 SQLite Architecture (8 modular tables).
+- ContentRepository with bilingual queries, guest attempt tracking, and language preference persistence.
+- SyncService for atomic, read-only PostgREST synchronization from Supabase development database `scamplay-dev`.
 
 Pending actions:
-- Awaiting user review of M2B completion report and explicit written approval before proceeding to M3 (Scenario Library UI).
+- Awaiting user review of M3 completion report and explicit written approval before proceeding to M4 (First Playable Interactive Scenario Engine).
 
-Next gate: M3 Approval (Scenario Library UI).
+Next gate: M4 Approval (First Playable Interactive Scenario Engine: step evaluation, decision branching, local provisional scoring, instant feedback).

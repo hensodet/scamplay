@@ -1,6 +1,6 @@
 # Task register
 
-**Current authorization: M2B — FLUTTER LOCAL SQLITE (DRIFT) INTEGRATION & OFFLINE DATA MANAGEMENT (COMPLETED)**
+**Current authorization: M3 — BILINGUAL SCENARIO LIBRARY UI, ILLUSTRATED CARDS, AND SCENARIO DISCOVERY (COMPLETED & VERIFIED)**
 
 - [x] M0 audit all starter documents for inconsistent scope.
 - [x] M0 confirm minimum technical schema approach and backend read path.
@@ -49,6 +49,16 @@
 - [x] M2B Static analysis: flutter analyze returned 0 issues.
 - [x] M2B Build verification: flutter build apk --debug succeeded (app-debug.apk, exit 0).
 - [x] M2B Handset verification on ALI NX1: verified live sync from Supabase, bilingual switching (km/en), persistent English selection across app cold restart, and offline boot in Airplane Mode with full cached scenario rendering.
-- [ ] Obtain written user approval for M3 (Scenario Library UI).
+- [x] Obtain written user approval for M3 (Approved 18 Nov 2026).
+- [x] M3 Design coherent, rights-neutral vector illustration component (`ScenarioCoverIllustration`) for 4 categories avoiding third-party logos.
+- [x] M3 Build interactive `ComingSoonSheet` modal explaining pedagogical curriculum review when tapping coming-soon cards.
+- [x] M3 Build illustrated, accessible `ScenarioCardWidget` displaying category, duration, status badges, title, educational summary, and tap interaction.
+- [x] M3 Build `ScenarioDetailScreen` presenting scenario cover illustration, learning objectives, multi-step structure preview, safety takeaway, and disabled M4 gameplay trigger.
+- [x] M3 Update Scenario Library UI in `app.dart` with horizontal category filtering pills, offline cache indicator banner, educational disclaimer, and pull-to-refresh sync.
+- [x] M3 Automated testing: 15/15 unit, sync, and widget tests passed (`flutter test` across all 4 suites in 17s).
+- [x] M3 Static analysis: `flutter analyze` returned 0 issues.
+- [x] M3 Build verification: `flutter build apk --debug` succeeded in 94.5s.
+- [x] M3 Handset verification on physical device ALI NX1: 5 screenshots captured (Khmer library, English library, Telegram preview screen, Coming Soon bottom sheet, and Airplane Mode offline cold-start).
+- [ ] Obtain written user approval for M4 (First Playable Interactive Scenario Engine).
 
 Change this tracker only within the approved milestone. Mark executed tests separately from planned tests. Do not mark checkboxes until actually complete.

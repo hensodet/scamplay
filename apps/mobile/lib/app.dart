@@ -4,6 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'data/models/scenario_models.dart';
 import 'data/repositories/content_repository.dart';
 import 'data/sync/sync_service.dart';
+import 'ui/screens/scenario_detail_screen.dart';
+import 'ui/widgets/coming_soon_sheet.dart';
+import 'ui/widgets/scenario_card_widget.dart';
 
 class ScamPlayApp extends StatefulWidget {
   final ContentRepository repository;
@@ -90,7 +93,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ScenarioCardModel> _scenarios = [];
+  List<ScenarioCardModel> _allScenarios = [];
+  List<ScenarioCardModel> _filteredScenarios = [];
+  String? _selectedCategorySlug; // null = all
   bool _isLoading = true;
   bool _isSyncing = false;
   String? _syncStatusMessage;
@@ -121,11 +126,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (mounted) {
       setState(() {
-        _scenarios = cards;
+        _allScenarios = cards;
+        _applyFilter();
         _lastSyncTime = lastSync;
         _isLoading = false;
       });
     }
+  }
+
+  void _applyFilter() {
+    if (_selectedCategorySlug == null) {
+      _filteredScenarios = List.from(_allScenarios);
+    } else {
+      _filteredScenarios = _allScenarios
+          .where((card) => card.categorySlug == _selectedCategorySlug)
+          .toList();
+    }
+  }
+
+  void _onCategorySelected(String? categorySlug) {
+    setState(() {
+      _selectedCategorySlug = categorySlug;
+      _applyFilter();
+    });
   }
 
   Future<void> _triggerSync() async {
@@ -150,6 +173,26 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
       await _loadLocalContent();
+    }
+  }
+
+  void _onCardTapped(ScenarioCardModel card) {
+    if (card.isPlayable) {
+      // Navigate to Scenario Preview / Detail Screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => ScenarioDetailScreen(
+            scenarioId: card.id,
+            categorySlug: card.categorySlug,
+            repository: widget.repository,
+            currentLocale: widget.currentLocale,
+            onLocaleChanged: widget.onLocaleChanged,
+          ),
+        ),
+      );
+    } else {
+      // Show friendly Coming Soon sheet
+      ComingSoonSheet.show(context, card, isKhmer);
     }
   }
 
@@ -196,18 +239,18 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Educational notice banner
+                // 1. Educational notice banner
                 Container(
                   padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Colors.amber.shade50,
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(color: Colors.amber.shade300),
                   ),
                   child: Row(
                     children: [
                       const Icon(Icons.info_outline, color: Colors.amber),
-                      const SizedBox(width: 8.0),
+                      const SizedBox(width: 10.0),
                       Expanded(
                         child: Text(
                           isKhmer
@@ -215,6 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : 'Independent Educational Prototype: Designed to build awareness against digital fraud and social engineering.',
                           style: TextStyle(
                             fontSize: 12.0,
+                            height: 1.4,
                             color: Colors.amber.shade900,
                           ),
                         ),
@@ -224,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 12.0),
 
-                // Offline & Sync Status Banner
+                // 2. Offline & Sync Status Banner
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                   decoration: BoxDecoration(
@@ -258,25 +302,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20.0),
 
-                // Scenario Library Header
+                // 3. Scenario Library Header
                 Text(
                   isKhmer ? 'បណ្ណាល័យសេណារីយ៉ូ (Scenario Library)' : 'Scenario Library',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 6.0),
                 Text(
                   isKhmer
                       ? 'ជ្រើសរើសមេរៀនដើម្បីចាប់ផ្តើមរៀន និងអនុវត្តជាក់ស្តែង'
                       : 'Choose a scenario to start learning and practicing safety decisions',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey.shade700,
+                        height: 1.3,
                       ),
                 ),
                 const SizedBox(height: 16.0),
 
-                // Scenario list or empty state
+                // 4. Category Filter Chips
+                if (_allScenarios.isNotEmpty) _buildCategoryFilterPills(),
+
+                const SizedBox(height: 16.0),
+
+                // 5. Scenario list or empty state
                 if (_isLoading)
                   const Center(
                     child: Padding(
@@ -284,14 +334,69 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircularProgressIndicator(),
                     ),
                   )
-                else if (_scenarios.isEmpty)
+                else if (_allScenarios.isEmpty)
                   _buildEmptyState()
+                else if (_filteredScenarios.isEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Text(
+                        isKhmer
+                            ? 'មិនមានមេរៀនក្នុងប្រភេទនេះនៅឡើយ'
+                            : 'No scenarios found in this category',
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
+                    ),
+                  )
                 else
-                  ..._scenarios.map(_buildScenarioCard),
+                  ..._filteredScenarios.map(
+                    (card) => ScenarioCardWidget(
+                      key: ValueKey('scenario_card_${card.id}'),
+                      card: card,
+                      isKhmer: isKhmer,
+                      onTap: () => _onCardTapped(card),
+                    ),
+                  ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryFilterPills() {
+    // Collect distinct categories from scenarios
+    final Map<String, String> categories = {};
+    for (final s in _allScenarios) {
+      categories[s.categorySlug] = s.categoryName;
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          // All category pill
+          ChoiceChip(
+            label: Text(isKhmer ? 'ទាំងអស់' : 'All'),
+            selected: _selectedCategorySlug == null,
+            onSelected: (_) => _onCategorySelected(null),
+          ),
+          const SizedBox(width: 8),
+          // Category pills
+          ...categories.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: ChoiceChip(
+                label: Text(entry.value),
+                selected: _selectedCategorySlug == entry.key,
+                onSelected: (selected) {
+                  _onCategorySelected(selected ? entry.key : null);
+                },
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -330,84 +435,6 @@ class _HomeScreenState extends State<HomeScreen> {
             label: Text(isKhmer ? 'ទាញយកមាតិកា' : 'Download Content'),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildScenarioCard(ScenarioCardModel card) {
-    final statusText = card.status == 'published'
-        ? (isKhmer ? 'ដំណើរការក្នុង M4' : 'Playable after M4')
-        : (isKhmer ? 'មកដល់ឆាប់ៗ' : 'Coming Soon');
-
-    return Card(
-      key: ValueKey(card.id),
-      elevation: 2.0,
-      margin: const EdgeInsets.only(bottom: 12.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Chip(
-                  label: Text(
-                    card.categoryName,
-                    style: const TextStyle(fontSize: 11.0),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  decoration: BoxDecoration(
-                    color: card.isPlayable ? Colors.blue.shade50 : Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(4.0),
-                    border: Border.all(
-                      color: card.isPlayable ? Colors.blue.shade200 : Colors.grey.shade300,
-                    ),
-                  ),
-                  child: Text(
-                    statusText,
-                    style: TextStyle(
-                      fontSize: 11.0,
-                      color: card.isPlayable ? Colors.blue.shade900 : Colors.grey.shade700,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              card.title,
-              style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4.0),
-            Text(
-              card.summary,
-              style: TextStyle(fontSize: 13.0, color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                Icon(Icons.schedule, size: 14.0, color: Colors.grey.shade500),
-                const SizedBox(width: 4.0),
-                Text(
-                  isKhmer
-                      ? '${card.estimatedMinutes} នាទី'
-                      : '${card.estimatedMinutes} mins',
-                  style: TextStyle(fontSize: 11.0, color: Colors.grey.shade600),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
