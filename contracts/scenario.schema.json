@@ -6,7 +6,7 @@
   "properties": {
     "id": { "type": "string" },
     "version": { "type": "integer", "minimum": 1 },
-    "status": { "type": "string", "enum": ["draft", "published", "archived", "demo_unreviewed"] },
+    "status": { "type": "string", "enum": ["draft", "published", "archived", "coming_soon"] },
     "category": { "type": "string" },
     "estimated_minutes": { "type": "integer", "minimum": 1 },
     "cover": {

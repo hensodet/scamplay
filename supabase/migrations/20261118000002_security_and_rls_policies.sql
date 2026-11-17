@@ -4,11 +4,22 @@
 -- Engine: PostgreSQL 15+
 
 -- 1. Explicit Privileges (Least Privilege Principle)
-REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public;
-REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM public;
-REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM public;
+-- Safely revoke all permissions from public, anon, and authenticated on ScamPlay application tables
+REVOKE ALL ON TABLE
+  public.scenario_categories,
+  public.scenario_category_localizations,
+  public.media_assets,
+  public.media_localizations,
+  public.scenarios,
+  public.scenario_localizations,
+  public.scenario_steps,
+  public.step_localizations,
+  public.answer_options,
+  public.answer_localizations,
+  public.scenario_versions
+FROM public, anon, authenticated;
 
--- Allow anon and authenticated clients to SELECT only published scenario data
+-- Grant explicit least-privilege SELECT to anon and authenticated clients for published content
 GRANT SELECT ON TABLE
   public.scenario_categories,
   public.scenario_category_localizations,
@@ -23,10 +34,14 @@ GRANT SELECT ON TABLE
   public.scenario_versions
 TO anon, authenticated;
 
--- NO INSERT, UPDATE, DELETE permissions are granted to anon or authenticated clients.
--- Writes are strictly reserved for service_role / backend administration.
+-- Allow execution of trigger functions for timestamp tracking
+GRANT EXECUTE ON FUNCTION public.set_updated_at() TO anon, authenticated, service_role;
 
--- 2. Enable Row Level Security (RLS) on all tables
+-- CRITICAL SECURITY RULE: NO INSERT, UPDATE, DELETE permissions are granted to anon or authenticated clients.
+-- Authenticated users do NOT automatically receive administrative rights.
+-- Mutations are strictly reserved for service_role / backend administration.
+
+-- 2. Enable Row Level Security (RLS) on all 11 application tables
 ALTER TABLE public.scenario_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.scenario_category_localizations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.media_assets ENABLE ROW LEVEL SECURITY;
@@ -189,7 +204,6 @@ BEGIN
   END IF;
 
   IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'storage' AND tablename = 'objects') THEN
-    -- Drop policy if exists to make migration idempotent
     DROP POLICY IF EXISTS "anon_select_approved_scenario_media" ON storage.objects;
 
     CREATE POLICY "anon_select_approved_scenario_media"

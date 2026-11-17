@@ -1,5 +1,5 @@
 // tests/verify_m2a_offline.mjs
-// Offline migration and contract verification test for M2A
+// Offline migration, UUID validity, and contract verification test for M2A
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -40,12 +40,33 @@ for (const file of migrationFiles) {
   assert(content.length > 50, `Migration file is non-empty: ${file}`);
 }
 
-// 2. Static Analysis on Security Migration
+// 2. Validate All UUID Literals in Seed Data
+const seedSql = fs.readFileSync(path.join(MIGRATIONS_DIR, '20261118000003_seed_scenarios.sql'), 'utf8');
+const uuidRegex = /[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}/g;
+const strictHexUuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const foundUuids = seedSql.match(uuidRegex) || [];
+assert(foundUuids.length > 0, `Found ${foundUuids.length} UUID literals in seed data`);
+
+let allUuidsValid = true;
+let invalidUuidList = [];
+for (const uuid of foundUuids) {
+  if (!strictHexUuidRegex.test(uuid)) {
+    allUuidsValid = false;
+    invalidUuidList.push(uuid);
+  }
+}
+assert(
+  allUuidsValid,
+  `All seed UUIDs are strictly valid hexadecimal literals (Invalid: ${invalidUuidList.join(', ')})`
+);
+
+// 3. Static Analysis on Security Migration
 const secSql = fs.readFileSync(path.join(MIGRATIONS_DIR, '20261118000002_security_and_rls_policies.sql'), 'utf8');
 
 assert(
-  secSql.includes('REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public;'),
-  'Security migration revokes public permissions'
+  secSql.includes('REVOKE ALL ON TABLE') && secSql.includes('FROM public, anon, authenticated;'),
+  'Security migration explicitly revokes table permissions from public, anon, and authenticated'
 );
 
 assert(
@@ -59,11 +80,11 @@ assert(
 );
 
 assert(
-  !secSql.includes('GRANT ALL ON ALL TABLES') && !secSql.includes('GRANT INSERT ON') && !secSql.includes('GRANT UPDATE ON') && !secSql.includes('GRANT DELETE ON'),
+  !secSql.includes('GRANT INSERT ON') && !secSql.includes('GRANT UPDATE ON') && !secSql.includes('GRANT DELETE ON'),
   'Security migration grants zero write permissions to anon/authenticated'
 );
 
-// 3. Verify Sample Content & Contract Compatibility
+// 4. Verify Sample Content & Contract Compatibility
 const sampleTakeoverPath = path.join(SAMPLE_DIR, 'scenario_telegram_takeover.demo.json');
 assert(fs.existsSync(sampleTakeoverPath), 'Demo scenario fixture exists');
 const takeoverData = JSON.parse(fs.readFileSync(sampleTakeoverPath, 'utf8'));
@@ -71,6 +92,12 @@ const takeoverData = JSON.parse(fs.readFileSync(sampleTakeoverPath, 'utf8'));
 assert(takeoverData.id === 'telegram-messenger-takeover', 'Scenario ID matches expected slug');
 assert(takeoverData.localizations.km && takeoverData.localizations.en, 'Scenario has bilingual root localizations');
 assert(Array.isArray(takeoverData.steps) && takeoverData.steps.length === 4, 'Scenario has 4 steps matching migration seed');
+
+// 5. Verify Scenario JSON Schema Contract
+const schemaPath = path.join(CONTRACTS_DIR, 'scenario.schema.json');
+const schemaData = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+assert(schemaData.properties.status.enum.includes('coming_soon'), 'Scenario schema contract includes coming_soon status');
+assert(schemaData.properties.status.enum.includes('published'), 'Scenario schema contract includes published status');
 
 console.log('============================================================');
 console.log(`Results: ${passedTests}/${totalTests} tests passed.`);

@@ -1,27 +1,28 @@
-# Project status (M2A Completed & Verified)
+# Project status (M2A Remediation & Verification in Progress)
 
 Date: 2026-11-18
-Current milestone: M2A (Development PostgreSQL Database, Schema Migrations, and Security Policies) — COMPLETED
-Approved actions: Supabase development setup guide, schema migrations (20261118000001), security and RLS policies (20261118000002), seed demonstration content (20261118000003), automated verification suite, offline static analysis test.
+Current milestone: M2A (Development PostgreSQL Database, Schema Migrations, and Security Policies) — REMEDIATION & VERIFICATION
+Approved actions: Audit migration correctness, fix invalid UUID literals, refine schema privileges, update JSON schema contract, execute static verification, document content versioning, prepare live test runners.
 Unapproved actions: Starting M2B (SQLite/Drift integration), connecting Flutter to live database, building admin dashboard, creating production databases, public deployment.
 
-Completed in M2A:
-- Schema Design & Migration (`20261118000001_create_scenario_schema.sql`): Created 11 relational tables covering categories, scenarios, localizations (km/en), steps, answers, media assets, audit timestamps, and version snapshot archival.
-- Database Security & RLS Policies (`20261118000002_security_and_rls_policies.sql`):
-  - Revoked public default privileges across all tables and routines.
-  - Granted explicit `SELECT` privileges only to `anon` and `authenticated`.
-  - Enabled RLS on all 11 tables with publication-state checks (`status = 'published'`).
-  - Child tables (`scenario_steps`, `step_localizations`, `answer_options`, `answer_localizations`) strictly enforce scenario publication status via relational subqueries, preventing child data leaks from unpublished or preview scenarios.
-  - Restricted storage bucket object access to approved media assets.
-- Seed Demonstration Data (`20261118000003_seed_scenarios.sql`):
-  - 1 complete published bilingual scenario (`telegram-messenger-takeover`) with 4 steps and 6 answer options.
-  - 3 preview scenarios marked `coming_soon` with card metadata only.
-  - 1 draft scenario and 1 archived scenario used for negative RLS testing.
-- Automated SQL Verification Suite (`tests/sql/m2a_verification_suite.sql`): Implemented 9 automated tests verifying schema integrity, foreign keys, positive anonymous reads, negative draft/archived/child denials, and anonymous mutation rejections.
-- Offline Static Analysis Test (`tests/verify_m2a_offline.mjs`): Executed with 14/14 tests passing.
-- Supabase Development Setup Guide (`docs/SUPABASE_SETUP_GUIDE.md`): Provided detailed guidance for creating a free-tier development project in Singapore (`ap-southeast-1`) without secrets in source code.
+Completed in M2A Remediation:
+- Migration Correctness Audit:
+  - Fixed 107 UUID literals across seed data (`20261118000003_seed_scenarios.sql`) and SQL test harness (`tests/sql/m2a_verification_suite.sql`). Replaced invalid non-hexadecimal prefixes with RFC 4122 hexadecimal UUIDv4 strings.
+  - Replaced blanket `REVOKE ALL ON ALL ...` with explicit table-targeted REVOKE/GRANT statements on ScamPlay tables, granting trigger execution privileges to `public.set_updated_at()`.
+  - Reconciled `contracts/scenario.schema.json` status enum to include `coming_soon`.
+  - Verified 11-table schema definitions, foreign keys, triggers, and ordering.
+- Verification Testing:
+  - Static Analysis Suite (`tests/verify_m2a_offline.mjs`): 18/18 checks passed, confirming all 107 seed UUIDs are valid hex literals, security grants strictly omit public write mutations, and sample fixtures match contracts.
+  - SQL Verification Suite (`tests/sql/m2a_verification_suite.sql`): Updated with 10 comprehensive tests covering schema integrity, UUID rejection, foreign keys, unique keys, positive published reads, negative draft/archived/child isolation, anonymous and authenticated write denials, media review status filtering, and 100% bilingual parity.
+  - Live PostgREST Verification Runner (`tests/verify_m2a_live.mjs`): Created to measure empirical round-trip HTTP latency and assert PostgREST anonymous access rules against a live development instance.
+- Documentation:
+  - Created `docs/CONTENT_VERSIONING.md` documenting stable identifier strategy, state machine transitions, immutable version snapshots, and historical attempt preservation.
+  - Updated `docs/SUPABASE_SETUP_GUIDE.md` with step-by-step guidance for project creation and migration execution.
 
-Pending actions:
-- Awaiting user review of M2A completion report and explicit written approval before proceeding to M2B (Local Drift SQLite & Offline Synchronization).
+Pending actions for live database verification:
+1. Confirm whether user has an existing Supabase development project or guide project creation in Singapore (`ap-southeast-1`).
+2. Apply migrations `01`, `02`, `03` in development database.
+3. Run `tests/sql/m2a_verification_suite.sql` in development database SQL editor.
+4. Execute `node tests/verify_m2a_live.mjs` to benchmark latency and verify PostgREST security.
 
-Next gate: M2B Approval (Flutter SQLite Integration & Synchronization).
+Next gate: M2A Live Database Verification Sign-off, followed by M2B Approval.

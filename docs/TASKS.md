@@ -1,6 +1,6 @@
 # Task register
 
-**Current authorization: M2A — DEVELOPMENT POSTGRESQL SCHEMA, MIGRATIONS & RLS (COMPLETED)**
+**Current authorization: M2A — REMEDIATION & VERIFICATION**
 
 - [x] M0 audit all starter documents for inconsistent scope.
 - [x] M0 confirm minimum technical schema approach and backend read path.
@@ -24,12 +24,14 @@
 - [x] Configure Flutter SDK (3.50.0), Android Studio, Android SDK (37), NDK (28.2), and JBR JDK 25 on host.
 - [x] Complete Flutter CLI hydration (flutter create .), analysis (0 issues), tests (passed), debug APK build (exit 0), and physical Android device run on ALI NX1 (verified in Khmer and English).
 - [x] Obtain written user approval for M2A (Approved 18 Nov 2026).
-- [x] M2A Create Supabase development setup guide (Singapore region, Free Tier, non-secret credentials).
-- [x] M2A Implement core scenario relational schema migration (supabase/migrations/20261118000001_create_scenario_schema.sql).
-- [x] M2A Implement explicit privileges and child-level RLS policies (supabase/migrations/20261118000002_security_and_rls_policies.sql).
-- [x] M2A Implement bilingual seed demonstration data with 1 published and 3 coming soon scenarios (supabase/migrations/20261118000003_seed_scenarios.sql).
-- [x] M2A Build automated SQL security test suite verifying RLS positive/negative reads and write rejections (tests/sql/m2a_verification_suite.sql).
-- [x] M2A Build and execute static analysis and contract verification test suite (tests/verify_m2a_offline.mjs: 14/14 passed).
+- [x] M2A Remediation: Audit and correct all invalid UUID literals across seed data and test suites (107/107 strictly valid hex UUIDv4).
+- [x] M2A Remediation: Replace blanket schema privilege revokes with explicit table targets, grant trigger function execute privileges, and verify authenticated role write denials.
+- [x] M2A Remediation: Reconcile contracts/scenario.schema.json status enum to include 'coming_soon'.
+- [x] M2A Remediation: Document content versioning, stable identifiers, state transitions, and attempt preservation (docs/CONTENT_VERSIONING.md).
+- [x] M2A Remediation: Static verification and contract alignment test executed (tests/verify_m2a_offline.mjs: 18/18 passed).
+- [x] M2A Remediation: Create live PostgREST test runner measuring round-trip latency and verifying anon access (tests/verify_m2a_live.mjs).
+- [ ] Connect development Supabase project in Singapore and execute migrations 01, 02, 03.
+- [ ] Execute tests/sql/m2a_verification_suite.sql in development database.
 - [ ] Obtain written user approval for M2B.
 - [ ] M2B Flutter local SQLite (Drift) integration and offline synchronization.
 
