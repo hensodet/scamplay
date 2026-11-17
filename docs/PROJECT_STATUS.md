@@ -18,17 +18,17 @@ Completed in M2A Remediation:
 - Documentation:
   - Created `docs/CONTENT_VERSIONING.md` documenting stable identifier strategy, state machine transitions, immutable version snapshots, and historical attempt preservation.
   - Updated `docs/SUPABASE_SETUP_GUIDE.md` with step-by-step guidance for project creation and migration execution.
-- Tooling Preflight:
+- Tooling Preflight & Remote Linking:
   - Project-local Supabase CLI 3.2.0 installed in root `package.json` (`devDependencies`).
-  - Executed `supabase init` generating version-controlled `supabase/config.toml`.
-  - Added `.supabase_home/`, `.temp/`, and `supabase/.temp/` to `.gitignore`.
+  - Authenticated and linked to project `scamplay-dev` (ref: `ujpyanjnmtxpolhodzkl`, region: `ap-southeast-1`, Postgres 17.12.0).
+  - Executed `npx.cmd --no-install supabase migration list --remote` (verified 0 remote migrations applied, 3 local pending).
+  - Executed `npx.cmd --no-install supabase db push --dry-run --remote` (verified dry-run exit 0, zero mutations applied).
+  - Cleaned up `supabase/migrations/.gitkeep` for clean migration directory parsing.
 
 Pending actions for live database verification:
-1. Complete `npx supabase login` and project linking (`npx supabase link --project-ref <ref>`).
-2. Run non-mutating dry-run verification (`npx supabase db push --dry-run`).
-3. Obtain explicit user approval before applying migrations.
-4. Apply migrations `01`, `02`, `03` in development database.
-5. Run `tests/sql/m2a_verification_suite.sql` in development database.
-6. Execute `node tests/verify_m2a_live.mjs` to benchmark latency and verify PostgREST security.
+1. Obtain explicit user approval before applying migrations.
+2. Apply migrations `01`, `02`, `03` in development database (`npx.cmd --no-install supabase db push --remote`).
+3. Run `tests/sql/m2a_verification_suite.sql` in development database.
+4. Execute `node tests/verify_m2a_live.mjs` to benchmark latency and verify PostgREST security.
 
-Next gate: M2A Migration Execution Approval, followed by M2B.
+Next gate: M2A Live Migration Execution Approval, followed by M2B.

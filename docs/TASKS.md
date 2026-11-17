@@ -31,9 +31,11 @@
 - [x] M2A Remediation: Static verification and contract alignment test executed (tests/verify_m2a_offline.mjs: 18/18 passed).
 - [x] M2A Remediation: Create live PostgREST test runner measuring round-trip latency and verifying anon access (tests/verify_m2a_live.mjs).
 - [x] M2A Preflight: Configure project-local Supabase CLI 3.2.0 and generate supabase/config.toml.
-- [ ] Authenticate CLI and link to development project 'scamplay-dev'.
-- [ ] Run dry-run migration check (supabase db push --dry-run).
-- [ ] Connect development Supabase project in Singapore and execute migrations 01, 02, 03.
+- [x] M2A Preflight: Authenticate CLI and verify link to development project 'scamplay-dev' (ujpyanjnmtxpolhodzkl).
+- [x] M2A Preflight: Inspect remote migration history (npx.cmd --no-install supabase migration list --remote: 0 remote, 3 pending).
+- [x] M2A Preflight: Run non-mutating dry-run migration check (npx.cmd --no-install supabase db push --dry-run --remote: verified exit 0, 0 remote mutations).
+- [ ] Obtain explicit user approval before applying migrations.
+- [ ] Apply migrations 01, 02, 03 to development database (npx.cmd --no-install supabase db push --remote).
 - [ ] Execute tests/sql/m2a_verification_suite.sql in development database.
 - [ ] Obtain written user approval for M2B.
 - [ ] M2B Flutter local SQLite (Drift) integration and offline synchronization.
