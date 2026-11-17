@@ -34,9 +34,11 @@
 - [x] M2A Preflight: Authenticate CLI and verify link to development project 'scamplay-dev' (ujpyanjnmtxpolhodzkl).
 - [x] M2A Preflight: Inspect remote migration history (npx.cmd --no-install supabase migration list --remote: 0 remote, 3 pending).
 - [x] M2A Preflight: Run non-mutating dry-run migration check (npx.cmd --no-install supabase db push --dry-run --remote: verified exit 0, 0 remote mutations).
-- [ ] Obtain explicit user approval before applying migrations.
-- [ ] Apply migrations 01, 02, 03 to development database (npx.cmd --no-install supabase db push --remote).
-- [ ] Execute tests/sql/m2a_verification_suite.sql in development database.
+- [x] Obtain explicit user approval before applying migrations (Approved 18 Nov 2026).
+- [x] Apply migrations 01, 02, 03 to development database scamplay-dev (npx.cmd --no-install supabase db push --remote --yes: exit 0, all 3 migrations recorded).
+- [x] Execute in-database SQL verification suite on scamplay-dev (tests/sql/run_m2a_verification.sql: 14/14 tests PASSED).
+- [x] Execute live PostgREST API verification suite against scamplay-dev (tests/verify_m2a_live.mjs: 9/9 tests PASSED, round-trip latency measured).
+- [x] Verify remote database linter (supabase db lint --remote: 0 schema errors found).
 - [ ] Obtain written user approval for M2B.
 - [ ] M2B Flutter local SQLite (Drift) integration and offline synchronization.
 
