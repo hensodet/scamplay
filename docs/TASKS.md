@@ -1,6 +1,6 @@
 # Task register
 
-**Current authorization: M2A — REMEDIATION & VERIFICATION**
+**Current authorization: M2B — FLUTTER LOCAL SQLITE (DRIFT) INTEGRATION & OFFLINE DATA MANAGEMENT (COMPLETED)**
 
 - [x] M0 audit all starter documents for inconsistent scope.
 - [x] M0 confirm minimum technical schema approach and backend read path.
@@ -39,7 +39,16 @@
 - [x] Execute in-database SQL verification suite on scamplay-dev (tests/sql/run_m2a_verification.sql: 14/14 tests PASSED).
 - [x] Execute live PostgREST API verification suite against scamplay-dev (tests/verify_m2a_live.mjs: 9/9 tests PASSED, round-trip latency measured).
 - [x] Verify remote database linter (supabase db lint --remote: 0 schema errors found).
-- [ ] Obtain written user approval for M2B.
-- [ ] M2B Flutter local SQLite (Drift) integration and offline synchronization.
+- [x] Obtain written user approval for M2B (Approved 18 Nov 2026).
+- [x] M2B Implement Drift 2.31 SQLite schema mirroring 11 remote tables + local guest attempts, app preferences, and sync metadata.
+- [x] M2B Generate Drift database code via build_runner (app_database.g.dart).
+- [x] M2B Implement ContentRepository with bilingual card and detail queries, persistent guest attempt tracking, and language preference management.
+- [x] M2B Implement SyncService for read-only Supabase synchronization using public anon key, bilingual completeness validation, and atomic transaction updates.
+- [x] M2B Wire SQLite persistence to Flutter UI (language switcher persistence across restarts, offline cache status banner, offline fallback handling).
+- [x] M2B Automated testing: 10/10 unit, sync, and widget tests passed (flutter test).
+- [x] M2B Static analysis: flutter analyze returned 0 issues.
+- [x] M2B Build verification: flutter build apk --debug succeeded (app-debug.apk, exit 0).
+- [x] M2B Handset verification on ALI NX1: verified live sync from Supabase, bilingual switching (km/en), persistent English selection across app cold restart, and offline boot in Airplane Mode with full cached scenario rendering.
+- [ ] Obtain written user approval for M3 (Scenario Library UI).
 
 Change this tracker only within the approved milestone. Mark executed tests separately from planned tests. Do not mark checkboxes until actually complete.

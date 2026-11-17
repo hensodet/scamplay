@@ -1,38 +1,50 @@
-# Project status (M2A Completed & Verified Live)
+# Project status (M2B Completed & Fully Verified)
 
 Date: 2026-11-18
-Current milestone: M2A (Development PostgreSQL Database, Schema Migrations, and Security Policies) — COMPLETED & FULLY VERIFIED
-Approved actions: Audit migration correctness, fix UUID literals, link scamplay-dev, execute migrations 01/02/03 via CLI, execute in-database SQL verification suite, execute live PostgREST API suite, update trackers.
-Unapproved actions: Starting M2B (SQLite/Drift integration), connecting Flutter to live database, building admin dashboard, creating production databases, public deployment.
+Current milestone: M2B (Flutter Local SQLite/Drift Integration and Offline Data Management) — COMPLETED & FULLY VERIFIED
+Approved actions: Drift 2.31 SQLite schema mirroring 11 remote tables + local guest attempts, app preferences, and sync metadata; build_runner code generation; ContentRepository with bilingual card and detail queries; SyncService for read-only Supabase synchronization with bilingual completeness validation and atomic transaction updates; language switcher persistence; unit/sync/widget tests; debug APK build; physical device verification on ALI NX1 (online sync, bilingual toggle, persistent cold reboot, offline airplane mode).
+Unapproved actions: Starting M3 (Scenario Library UI design/overhaul), building M4 gameplay interactions, building admin dashboard, creating production databases, cloud progress upload.
 
-Completed in M2A:
-- Schema Design & Deployment:
-  - Deployed 3 version-controlled migrations to dedicated development project `scamplay-dev` (ref: `ujpyanjnmtxpolhodzkl`, Singapore `ap-southeast-1`, Postgres 17.12.0) via `npx.cmd --no-install supabase db push --remote --yes` (exit code 0).
-  - All 11 application tables created: `scenario_categories`, `scenario_category_localizations`, `media_assets`, `media_localizations`, `scenarios`, `scenario_localizations`, `scenario_steps`, `step_localizations`, `answer_options`, `answer_localizations`, `scenario_versions`.
-  - All 3 migrations recorded in remote migration history catalog `supabase_migrations.schema_migrations`.
-- Database Security & RLS Policies:
-  - Revoked public default privileges across all 11 tables.
-  - Granted least-privilege `SELECT` strictly to `anon` and `authenticated`.
-  - Revoked `EXECUTE` on trigger function `public.set_updated_at()` from untrusted roles.
-  - Enabled RLS on all 11 tables with publication-state checks (`status = 'published'`).
-  - Child tables (`scenario_steps`, `step_localizations`, `answer_options`, `answer_localizations`) enforce scenario publication status via relational subqueries, preventing child data leaks from unpublished or preview scenarios.
-  - Private storage bucket `scenario-media` configured (`public = false`) with strict access policy allowing only approved media linked to active scenarios.
-- Seed Demonstration Data:
-  - 1 complete published bilingual scenario (`telegram-messenger-takeover`) with 4 steps and 6 answer options.
-  - 3 preview scenarios marked `coming_soon` with card metadata only.
-  - 1 draft scenario and 1 archived scenario used for negative RLS testing.
-  - 107/107 UUID literals verified strictly valid hexadecimal RFC 4122 strings.
-- Automated In-Database SQL Verification Suite (`tests/sql/run_m2a_verification.sql`):
-  - Executed directly against `scamplay-dev` using `supabase db query --remote`: **14/14 tests PASSED**.
-  - Verified schema inventory, invalid UUID rejection, foreign keys, unique keys, positive anonymous reads, draft/archived zero-row isolation, child-step shielding, coming-soon card visibility with zero child steps, anonymous mutation denial, authenticated non-admin write denial, trigger execution denial, media review filtering, 100% bilingual parity, and storage bucket privacy.
-- Live PostgREST API Verification Suite (`tests/verify_m2a_live.mjs`):
-  - Executed over HTTPS against `https://ujpyanjnmtxpolhodzkl.supabase.co`: **9/9 tests PASSED**.
-  - Empirical HTTP round-trip latency measured: ~1103ms initial connection, ~220-280ms per query.
-  - Verified API-level status codes: HTTP 200 for published content, 0 rows for drafts, HTTP 401/403 for mutations.
-- Database Schema Linter (`supabase db lint --remote`):
-  - 0 schema errors found across `public` and `extensions` schemas.
+Completed in M2B:
+- Local Drift 2.31 SQLite Architecture:
+  - Integrated `drift: ^2.24.2`, `drift_flutter: ^0.2.4`, `sqlite3_flutter_libs: ^0.5.42`, `path_provider: ^2.1.6`, and `http: ^1.6.0`.
+  - Implemented 8 modular table definitions in `apps/mobile/lib/data/local/tables/`:
+    - `CachedScenarioCategories`, `CachedScenarioCategoryLocalizations`
+    - `CachedMediaAssets`, `CachedMediaLocalizations`
+    - `CachedScenarios`, `CachedScenarioLocalizations`
+    - `CachedScenarioSteps`, `CachedStepLocalizations`
+    - `CachedAnswerOptions`, `CachedAnswerLocalizations`
+    - `GuestAttempts` (attemptId, scenarioId, scenarioVersion, answersJson, scoreLocal, completed, completedAt, createdAt, updatedAt)
+    - `AppPreferences` (key, value, updatedAt)
+    - `SyncMetadata` (key, value, lastSyncedAt)
+  - Generated Drift database implementation via `build_runner` (`app_database.g.dart`) with PRAGMA foreign_keys = ON.
+- Content Repository & Local Progress (`apps/mobile/lib/data/repositories/content_repository.dart`):
+  - Bilingual card queries joining categories, scenarios, and localizations.
+  - Complete hierarchical scenario detail queries (scenarios -> steps -> options with localized labels and feedback).
+  - Guest attempt tracking: local provisional scores, completion flags, and JSON answers stored safely on-device without network transmission.
+  - Language preference management defaulting to Khmer (`km`), supporting English (`en`), and persisting across app lifecycles.
+- Read-Only Supabase Synchronization (`apps/mobile/lib/data/sync/sync_service.dart`):
+  - Fetches published scenarios and approved coming-soon cards using public anon key only.
+  - Strict bilingual completeness validation: rejects payloads if either Khmer (`km`) or English (`en`) translations are missing.
+  - Atomic cache updates: clears and repopulates cache tables inside a single Drift SQLite transaction (`db.transaction`).
+  - Strict isolation: `GuestAttempts` and `AppPreferences` are completely decoupled and preserved across content updates or sync failures.
+  - Resilient error handling: network timeouts and HTTP errors roll back cleanly, leaving previous valid cache intact.
+- Automated Testing Suite:
+  - `flutter analyze`: 0 errors, 0 warnings across all application and test files.
+  - `flutter test`: **10/10 tests PASSED** in 4s:
+    - 5/5 database and repository tests (CRUD, foreign keys, language persistence, attempt preservation).
+    - 4/4 sync service tests (successful atomic sync, bilingual validation failure, HTTP 500 rollback, attempt preservation).
+    - 1/1 widget test verifying UI rendering, bilingual switcher toggle, and database persistence.
+- Production-Ready Debug Build:
+  - `flutter build apk --debug` succeeded cleanly (exit code 0; `app-debug.apk`, 189 MB).
+- Physical Handset Verification (`ALI NX1`, `AWCXUT4115006583`, Android 15, API 35):
+  - Successfully installed APK via ADB.
+  - Online sync executed on initial launch: fetched and cached 4 scenarios from remote Supabase development database `scamplay-dev`.
+  - Bilingual toggle verified: instantly switched UI between Khmer and English with full text parity.
+  - Cold reboot persistence verified: app force-stopped and re-launched; restored directly into previously selected English locale from SQLite `AppPreferences`.
+  - Offline mode verified: device placed in Airplane Mode; app cold-booted offline and rendered all 4 scenario cards directly from local Drift SQLite cache without network.
 
 Pending actions:
-- Awaiting user review of M2A final completion report and explicit written approval before proceeding to M2B (Local Drift SQLite & Offline Synchronization).
+- Awaiting user review of M2B completion report and explicit written approval before proceeding to M3 (Scenario Library UI).
 
-Next gate: M2B Approval (Flutter SQLite Integration & Synchronization).
+Next gate: M3 Approval (Scenario Library UI).
