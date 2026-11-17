@@ -1,23 +1,27 @@
-# Project status (M1 Completed & Verified)
+# Project status (M2A Completed & Verified)
 
 Date: 2026-11-18
-Current milestone: M1 (Environment Verification, Repository Initialization, and Project Scaffolding) — COMPLETED
-Approved actions: Environment verification, monorepo scaffolding, Flutter shell, Next.js shell, contracts, .gitignore, documentation updates, Git initial commit, on-device mobile verification.
-Unapproved actions: Supabase cloud provisioning, database migrations, production deployments, starting M2A/M2B.
+Current milestone: M2A (Development PostgreSQL Database, Schema Migrations, and Security Policies) — COMPLETED
+Approved actions: Supabase development setup guide, schema migrations (20261118000001), security and RLS policies (20261118000002), seed demonstration content (20261118000003), automated verification suite, offline static analysis test.
+Unapproved actions: Starting M2B (SQLite/Drift integration), connecting Flutter to live database, building admin dashboard, creating production databases, public deployment.
 
-Completed in M1:
-- Node.js v24.11.1 and npm.cmd v11.6.2 verified on host.
-- Git for Windows v2.56.0 installed, repository initialized, and initial commit (8ebf842) created.
-- Flutter SDK 3.50.0, Dart 3.14.0, Android SDK 37, NDK 28.2.13676358, and Android Studio JBR JDK 25 verified and configured.
-- Monorepo scaffolded: apps/mobile, apps/admin-web, supabase/migrations, contracts, tests.
-- Enhanced .gitignore created with strict security, Flutter, and Next.js exclusions.
-- apps/mobile: Hydrated with official Flutter tooling (package com.scamplay.app). `flutter pub get` (exit 0), `flutter analyze` (0 issues), `flutter test` (passed), `flutter build apk --debug` (exit 0).
-- Installed and launched debug APK on physical Android test handset (ALI NX1, Android 15, API 35); verified Khmer default launch and interactive toggle to English with captured visual screenshots.
-- apps/admin-web: Upgraded to supported Next.js 16.4.6, React 19, TypeScript 5.7, Tailwind CSS 3.4; dependencies installed via npm.cmd; production build (next build --webpack) successfully compiled with exit code 0.
-- contracts/: JSON schemas created for scenario payload and manifest.
-- Documentation updated: M2 prerequisites recorded in ARCHITECTURE.md and DATA_MODEL.md (all scenario tables enforce publication-state rules; grants, RLS, storage, and offline caching empirically tested).
+Completed in M2A:
+- Schema Design & Migration (`20261118000001_create_scenario_schema.sql`): Created 11 relational tables covering categories, scenarios, localizations (km/en), steps, answers, media assets, audit timestamps, and version snapshot archival.
+- Database Security & RLS Policies (`20261118000002_security_and_rls_policies.sql`):
+  - Revoked public default privileges across all tables and routines.
+  - Granted explicit `SELECT` privileges only to `anon` and `authenticated`.
+  - Enabled RLS on all 11 tables with publication-state checks (`status = 'published'`).
+  - Child tables (`scenario_steps`, `step_localizations`, `answer_options`, `answer_localizations`) strictly enforce scenario publication status via relational subqueries, preventing child data leaks from unpublished or preview scenarios.
+  - Restricted storage bucket object access to approved media assets.
+- Seed Demonstration Data (`20261118000003_seed_scenarios.sql`):
+  - 1 complete published bilingual scenario (`telegram-messenger-takeover`) with 4 steps and 6 answer options.
+  - 3 preview scenarios marked `coming_soon` with card metadata only.
+  - 1 draft scenario and 1 archived scenario used for negative RLS testing.
+- Automated SQL Verification Suite (`tests/sql/m2a_verification_suite.sql`): Implemented 9 automated tests verifying schema integrity, foreign keys, positive anonymous reads, negative draft/archived/child denials, and anonymous mutation rejections.
+- Offline Static Analysis Test (`tests/verify_m2a_offline.mjs`): Executed with 14/14 tests passing.
+- Supabase Development Setup Guide (`docs/SUPABASE_SETUP_GUIDE.md`): Provided detailed guidance for creating a free-tier development project in Singapore (`ap-southeast-1`) without secrets in source code.
 
 Pending actions:
-- Awaiting user review of M1 completion and explicit written approval before proceeding to M2A (PostgreSQL / Supabase Schema & Security).
+- Awaiting user review of M2A completion report and explicit written approval before proceeding to M2B (Local Drift SQLite & Offline Synchronization).
 
-Next gate: M2A Approval (Database & Security Foundation).
+Next gate: M2B Approval (Flutter SQLite Integration & Synchronization).

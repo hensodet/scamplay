@@ -1,6 +1,6 @@
 # Task register
 
-**Current authorization: M1 — ENVIRONMENT VERIFICATION & REPOSITORY SCAFFOLDING (COMPLETED)**
+**Current authorization: M2A — DEVELOPMENT POSTGRESQL SCHEMA, MIGRATIONS & RLS (COMPLETED)**
 
 - [x] M0 audit all starter documents for inconsistent scope.
 - [x] M0 confirm minimum technical schema approach and backend read path.
@@ -23,7 +23,14 @@
 - [x] Initialize Git repository and create initial commit (8ebf842).
 - [x] Configure Flutter SDK (3.50.0), Android Studio, Android SDK (37), NDK (28.2), and JBR JDK 25 on host.
 - [x] Complete Flutter CLI hydration (flutter create .), analysis (0 issues), tests (passed), debug APK build (exit 0), and physical Android device run on ALI NX1 (verified in Khmer and English).
-- [ ] Obtain written user approval for M2A.
-- [ ] M2A Supabase development database migrations and RLS verification.
+- [x] Obtain written user approval for M2A (Approved 18 Nov 2026).
+- [x] M2A Create Supabase development setup guide (Singapore region, Free Tier, non-secret credentials).
+- [x] M2A Implement core scenario relational schema migration (supabase/migrations/20261118000001_create_scenario_schema.sql).
+- [x] M2A Implement explicit privileges and child-level RLS policies (supabase/migrations/20261118000002_security_and_rls_policies.sql).
+- [x] M2A Implement bilingual seed demonstration data with 1 published and 3 coming soon scenarios (supabase/migrations/20261118000003_seed_scenarios.sql).
+- [x] M2A Build automated SQL security test suite verifying RLS positive/negative reads and write rejections (tests/sql/m2a_verification_suite.sql).
+- [x] M2A Build and execute static analysis and contract verification test suite (tests/verify_m2a_offline.mjs: 14/14 passed).
+- [ ] Obtain written user approval for M2B.
+- [ ] M2B Flutter local SQLite (Drift) integration and offline synchronization.
 
 Change this tracker only within the approved milestone. Mark executed tests separately from planned tests. Do not mark checkboxes until actually complete.
