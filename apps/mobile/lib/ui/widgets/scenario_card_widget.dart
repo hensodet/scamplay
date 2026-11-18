@@ -172,7 +172,7 @@ class ScenarioCardWidget extends StatelessWidget {
                                 actionHint,
                                 style: AppTypography.button(
                                   isKhmer: isKhmer,
-                                  fontSize: 12.5,
+                                  fontSize: 14.5,
                                   color: isPlayable
                                       ? const Color(0xFF1D4ED8)
                                       : const Color(0xFF64748B),

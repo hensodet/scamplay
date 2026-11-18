@@ -3,6 +3,7 @@ import '../../data/models/scenario_models.dart';
 import '../../data/repositories/content_repository.dart';
 import '../theme/app_typography.dart';
 import '../widgets/scenario_cover_illustration.dart';
+import 'scenario_play_screen.dart';
 
 class ScenarioDetailScreen extends StatefulWidget {
   final String scenarioId;
@@ -77,7 +78,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
               icon: const Icon(Icons.language, size: 18),
               label: Text(
                 isKhmer ? 'English' : 'ភាសាខ្មែរ',
-                style: AppTypography.button(isKhmer: isKhmer, fontSize: 13),
+                style: AppTypography.button(isKhmer: isKhmer, fontSize: 15.0),
               ),
               onPressed: () {
                 widget.onLocaleChanged(
@@ -232,7 +233,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                                     _detail!.closingSummary,
                                     style: AppTypography.body(
                                       isKhmer: isKhmer,
-                                      fontSize: 12.5,
+                                      fontSize: 15.0,
                                       color: const Color(0xFF78350F),
                                     ),
                                   ),
@@ -244,24 +245,40 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // User-Facing Gameplay Button (Disabled until M4; NO internal milestone terms exposed)
+                      // Interactive Gameplay Button (M4 Playable Trigger)
                       SizedBox(
                         width: double.infinity,
-                        height: 50,
-                        child: OutlinedButton.icon(
-                          onPressed: null, // Disabled per gate rules until playable scenario is verified
-                          icon: const Icon(Icons.sports_esports_outlined, size: 20),
+                        height: 52,
+                        child: ElevatedButton.icon(
+                          key: const ValueKey('start_playing_button'),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => ScenarioPlayScreen(
+                                  scenarioId: widget.scenarioId,
+                                  repository: widget.repository,
+                                  currentLocale: widget.currentLocale,
+                                  onLocaleChanged: widget.onLocaleChanged,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.play_arrow_rounded, size: 24),
                           label: Text(
-                            isKhmer
-                                ? 'លេង (នឹងមកដល់ឆាប់ៗ)'
-                                : 'Play (Coming Soon)',
-                            style: AppTypography.button(isKhmer: isKhmer, fontSize: 14),
+                            isKhmer ? 'ចាប់ផ្តើមលេង' : 'Start Playing',
+                            style: AppTypography.button(
+                              isKhmer: isKhmer,
+                              fontSize: 16.5,
+                              color: Colors.white,
+                            ),
                           ),
-                          style: OutlinedButton.styleFrom(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1E3A8A),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            side: const BorderSide(color: Color(0xFFCBD5E1)),
+                            elevation: 1,
                           ),
                         ),
                       ),
@@ -290,7 +307,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
           Expanded(
             child: Text(
               text,
-              style: AppTypography.body(isKhmer: isKhmer, fontSize: 13.0),
+              style: AppTypography.body(isKhmer: isKhmer, fontSize: 15.5),
             ),
           ),
         ],
@@ -331,7 +348,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                   step.bodyText,
                   style: AppTypography.body(
                     isKhmer: isKhmer,
-                    fontSize: 13.0,
+                    fontSize: 15.5,
                     fontWeight: FontWeight.w500,
                     color: const Color(0xFF0F172A),
                   ),
@@ -348,7 +365,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                       isKhmer
                           ? '${step.options.length} ជម្រើសការសម្រេចចិត្ត'
                           : '${step.options.length} decision options',
-                      style: AppTypography.caption(isKhmer: isKhmer, fontSize: 11.0),
+                      style: AppTypography.caption(isKhmer: isKhmer, fontSize: 13.0),
                     ),
                   ),
                 ],

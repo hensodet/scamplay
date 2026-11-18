@@ -218,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             fontFamily: AppTypography.fontKantumruyPro,
             fontWeight: FontWeight.w800,
-            fontSize: 20,
+            fontSize: 22,
             letterSpacing: 0.2,
             color: Color(0xFF0F172A),
           ),
@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.language, size: 18),
               label: Text(
                 isKhmer ? 'English' : 'ភាសាខ្មែរ',
-                style: AppTypography.button(isKhmer: isKhmer, fontSize: 13),
+                style: AppTypography.button(isKhmer: isKhmer, fontSize: 15.0),
               ),
               onPressed: () {
                 widget.onLocaleChanged(
@@ -287,8 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               : 'Independent Educational Prototype: Building awareness against digital fraud and social engineering (Not an official authority).',
                           style: AppTypography.body(
                             isKhmer: isKhmer,
-                            fontSize: 11.5,
-                            height: 1.35,
+                            fontSize: 13.5,
+                            height: 1.45,
                             color: const Color(0xFF78350F), // Amber 900
                           ),
                         ),
@@ -328,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : 'Local offline data')),
                           style: AppTypography.body(
                             isKhmer: isKhmer,
-                            fontSize: 11.5,
+                            fontSize: 13.5,
                             color: const Color(0xFF334155),
                           ),
                         ),
@@ -348,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   isKhmer
                       ? 'ជ្រើសរើសសេណារីយ៉ូឆបោក ដើម្បីអនុវត្តការសម្រេចចិត្តប្រកបដោយសុវត្ថិភាព'
                       : 'Choose a scam scenario to practice safer digital decisions',
-                  style: AppTypography.caption(isKhmer: isKhmer, fontSize: 13.5),
+                  style: AppTypography.caption(isKhmer: isKhmer, fontSize: 15.0),
                 ),
                 const SizedBox(height: 16.0),
 

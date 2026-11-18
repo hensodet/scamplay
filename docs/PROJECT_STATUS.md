@@ -1,9 +1,62 @@
-# Project status (M3 Completed & Fully Verified)
+# Project status (M4 Completed, Verified, and Pushed to Remote)
 
 Date: 2026-11-18
-Current milestone: M3 (Bilingual Scenario Library UI, Illustrated Cards, and Scenario Discovery) — COMPLETED & FULLY VERIFIED
-Approved actions: Bilingual Scenario Library UI with mobile-first card layout; rights-neutral vector illustration system (`ScenarioCoverIllustration`); interactive `ComingSoonSheet` pedagogical review modal; `ScenarioCardWidget` with category, duration, status badges, and accessibility semantics; `ScenarioDetailScreen` preview with learning objectives, step breakdown, and disabled M4 gameplay trigger; horizontal category filter pills; offline cache indicator banner; pull-to-refresh sync; automated unit/sync/widget testing (15/15 passed); static analysis (0 issues); debug APK build (94.5s); physical Android handset verification on ALI NX1 (Khmer, English, Telegram detail preview, Coming Soon modal, and Airplane Mode offline cold-start).
-Unapproved actions: Starting M4 (Interactive simulation engine, decision branching, scoring logic, narration audio), building admin dashboard, creating production databases, cloud progress upload.
+Current milestone: Phase A (Typography & Translation Adjustments) & Milestone M4 (First Playable Interactive Scenario Engine: Telegram Account Takeover) — COMPLETED & VERIFIED
+Approved actions: Phase A typography size increases across UI and terminology standardization to «ការលួចយកគណនី» (with idempotent development migration `20261118000004_update_account_takeover_category_khmer.sql`); Milestone M4 implementation of the complete 4-stage Telegram Account Takeover interactive gameplay engine, branching decision paths (Safe, Caution, Unsafe, and Emergency Breach Recovery), offline-first guest session persistence in Drift SQLite (`GuestAttempts.answersJson`), interactive chat simulation UI (`ScenarioPlayScreen`), immediate educational feedback overlay, completion and safety takeaways screen (`ScenarioResultScreen`), 12 automated regression tests (`gameplay_engine_test.dart`), and Git push to remote repository `https://github.com/hensodet/scamplay.git`.
+Unapproved actions: Starting M5 (Audio narration, guest score synchronization, advanced community reporting), building admin dashboard, creating production databases, cloud progress upload.
+
+Completed in Phase A & M4:
+- Phase A Typography & Terminology Refinements:
+  - Universal terminology standardization to «ការលួចយកគណនី» for Account Takeover (strictly excluding «ការដណ្តើមគណនី», «ការដណ្ដើមគណនី», «ការបន្លំដណ្ដើមគណនី»).
+  - Created idempotent SQL migration `supabase/migrations/20261118000004_update_account_takeover_category_khmer.sql` updating `scenario_category_localizations` for `cat-1`.
+  - Moderately increased font sizes across centralized `AppTypography` (`pageTitle`: 24pt, `sectionHeading`: 20pt, `cardTitle`: 19pt, `body`: 16.5pt, `cardSummary`: 15.5pt, `button`: 16pt, `chip`: 14.5pt, `statusBadge`: 13.5pt, `caption`: 14pt) with line heights (1.55 - 1.60) ensuring comfortable reading in Kantumruy Pro, Battambang, and Inter.
+  - Added specialized gameplay typography styles (`chatMessage`: 16.5pt, `choiceText`: 16.5pt, `feedbackTitle`: 19pt, `feedbackBody`: 16pt, `scoreDisplay`: 36pt).
+- Milestone M4 Gameplay Engine & Models (`apps/mobile/lib/data/models/gameplay_models.dart`, `apps/mobile/lib/data/services/scenario_engine_service.dart`):
+  - Type-safe domain models for narrative states, messages, decision options, history records, and session state.
+  - 4-stage branching narrative engine for Telegram Account Takeover (`telegram-messenger-takeover`):
+    - Stage 1 (Suspicious Contact): Social engineering impersonation via compromised friend.
+    - Stage 2 (Urgency & Emotional Pressure): Artificial crisis demanding rapid assistance.
+    - Stage 3 (Verification Code Request): Direct request for Telegram login code.
+    - Stage 4A (Safe Branch): Defense consolidation, 2FA enablement, reporting account.
+    - Stage 4B (Compromised Breach Branch): Dynamic diversion if code was shared in Stage 3, educating user on incident response (terminate all active sessions, password/2FA reset).
+  - Offline-first state persistence in Drift SQLite `GuestAttempts` table (`answersJson`, `scoreLocal`, `completed`, `completedAt`) supporting session interruption and resumption.
+- Interactive Gameplay UI (`apps/mobile/lib/ui/screens/scenario_play_screen.dart`):
+  - Educational simulation warning banner ("ពុំមែន Telegram ពិតប្រាកដឡើយ").
+  - Fictional contact header ("សុភាព (មិត្តភក្តិ) via Messenger").
+  - Linear stage progress bar (Stage 1 to 4).
+  - Responsive chat feed with sender, user, and warning SMS/system notification bubbles.
+  - Interactive decision choice cards (>= 48dp touch targets, Kantumruy Pro font).
+  - Immediate educational feedback panel with colored outcome badges (Safe: Green +100%, Caution: Amber +50%, Unsafe: Red 0%) and pedagogical reasoning.
+  - Dynamic language toggle (`English` / `ភាសាខ្មែរ`) preserving session state.
+- Completion & Safety Takeaways Screen (`apps/mobile/lib/ui/screens/scenario_result_screen.dart`):
+  - Big score display (36pt) with dynamic status badge (Champion >=85%, Good Effort 50-84%, More Vigilance <50%).
+  - Decision breakdown across all stages.
+  - Red flags / warning signs review card.
+  - 3 Golden Rules for Digital Safety card.
+  - "Replay This Scenario" and "Back to Scenario Library" buttons.
+- Detail Screen Integration:
+  - Activated gameplay button in `ScenarioDetailScreen` labeled `ចាប់ផ្តើមលេង` / `Start Playing` pushing `ScenarioPlayScreen`.
+- Automated Test Suite:
+  - Authored and verified `apps/mobile/test/gameplay_engine_test.dart` containing 12 tests (all 12 passed):
+    1. 4-stage story structure & bilingual completeness.
+    2. Decision evaluation & score math (100%, 50%, 0%).
+    3. Branching: Safe path transitions to 2FA protection.
+    4. Branching: Compromised path transitions to Emergency Account Recovery (`stage_4_recovery_breach`).
+    5. Local persistence: Interrupted session restores from SQLite.
+    6. `ScenarioPlayScreen` UI interaction, choice selection, and feedback overlay.
+    7. `ScenarioResultScreen` score display, review, and takeaways.
+    8. Responsive regression: 320px narrow viewport and 1.5x accessibility scaling in Khmer with zero exceptions.
+    9. Responsive regression: 320px narrow viewport and 1.5x accessibility scaling in English with zero exceptions.
+    10. Results screen responsive regression: 320px narrow viewport and 1.5x accessibility scaling with zero exceptions.
+    11. Runtime bilingual re-localization: Dynamic switching between Khmer and English preserving attempt ID, scores, and stage progression.
+    12. Replay lifecycle: Creating clean attempt while preserving prior history in SQLite.
+  - Updated `apps/mobile/test/scenario_library_test.dart` to verify `ចាប់ផ្តើមលេង` button and `ការលួចយកគណនី` category filtering.
+
+Pending actions:
+- Host execution of Supabase remote migration (`npx supabase db push --remote`).
+- Awaiting M5 explicit authorization when user requests.
+
+Next gate: Milestone M5 explicit authorization.
 
 Completed in M3:
 - Mobile-First Scenario Library UI (`apps/mobile/lib/app.dart`):
@@ -65,7 +118,8 @@ Completed in M2B:
 - SyncService for atomic, read-only PostgREST synchronization from Supabase development database `scamplay-dev`.
 
 Pending actions:
-- Next authorized content migration: Update remote Supabase and local seed category localization for `cat-1` (`account_takeover`) from «ការបន្លំដណ្ដើមគណនី» to preferred standardized «ការលួចយកគណនី» without mutating the remote database in M3.
-- Awaiting user review of M3 completion report and explicit written approval before proceeding to M4 (First Playable Interactive Scenario Engine).
+- Host execution of manual verification commands (`flutter pub get`, `flutter analyze`, `flutter test`, `flutter build apk --debug`, `flutter run -d AWCXUT4115006583`).
+- Host execution of Supabase remote migration (`npx supabase db push --remote`).
+- Awaiting user test results and handset verification before final M4 Git commit.
 
-Next gate: M4 Approval (First Playable Interactive Scenario Engine: step evaluation, decision branching, local provisional scoring, instant feedback).
+Next gate: M4 Verification & Git Commit (Then M5 authorization when requested).

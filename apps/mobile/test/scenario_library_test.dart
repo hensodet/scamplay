@@ -64,7 +64,7 @@ void main() {
 
     // Category Localizations
     final catLocs = [
-      {'id': 'cat-1', 'km': 'ការបន្លំដណ្ដើមគណនី', 'en': 'Account Takeover'},
+      {'id': 'cat-1', 'km': 'ការលួចយកគណនី', 'en': 'Account Takeover'},
       {'id': 'cat-2', 'km': 'ហាងអនឡាញក្លែងក្លាយ', 'en': 'Fake Online Store'},
       {'id': 'cat-3', 'km': 'ការក្លែងបន្លំធនាគារ', 'en': 'Bank Impersonation'},
       {'id': 'cat-4', 'km': 'ការវិនិយោគក្លែងក្លាយ', 'en': 'Fake Investment'},
@@ -399,7 +399,7 @@ void main() {
     expect(find.text('ព័ត៌មានលម្អិតអំពីសេណារីយ៉ូ'), findsOneWidget);
     expect(find.text('អ្វីដែលអ្នកនឹងរៀន'), findsOneWidget);
     expect(find.text('រចនាសម្ព័ន្ធសេណារីយ៉ូ (1 ជំហាន)'), findsOneWidget);
-    expect(find.text('លេង (នឹងមកដល់ឆាប់ៗ)'), findsOneWidget);
+    expect(find.text('ចាប់ផ្តើមលេង'), findsOneWidget);
   });
 
   testWidgets('4. Tapping Coming Soon card displays ComingSoonSheet modal', (tester) async {
@@ -441,8 +441,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Tap 'ការបន្លំដណ្ដើមគណនី' chip
-    await tester.tap(find.widgetWithText(ChoiceChip, 'ការបន្លំដណ្ដើមគណនី'));
+    // Tap 'ការលួចយកគណនី' chip
+    await tester.tap(find.widgetWithText(ChoiceChip, 'ការលួចយកគណនី'));
     await tester.pumpAndSettle();
 
     // Only Telegram card should be visible

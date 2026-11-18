@@ -26,7 +26,7 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontKantumruyPro : fontInter,
       fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
-      fontSize: 20.0,
+      fontSize: 24.0,
       fontWeight: FontWeight.w700,
       height: 1.35,
       color: color ?? const Color(0xFF0F172A),
@@ -38,7 +38,7 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontKantumruyPro : fontInter,
       fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
-      fontSize: 16.0,
+      fontSize: 20.0,
       fontWeight: FontWeight.w600,
       height: 1.35,
       color: color ?? const Color(0xFF0F172A),
@@ -50,7 +50,7 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontKantumruyPro : fontInter,
       fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
-      fontSize: 16.5,
+      fontSize: 19.0,
       fontWeight: FontWeight.w600,
       height: 1.35,
       color: color ?? const Color(0xFF0F172A),
@@ -60,7 +60,7 @@ class AppTypography {
   /// Body text for descriptions, intros, and explanations (Battambang for Khmer)
   static TextStyle body({
     required bool isKhmer,
-    double fontSize = 13.5,
+    double fontSize = 16.5,
     FontWeight fontWeight = FontWeight.w400,
     double? height,
     Color? color,
@@ -70,7 +70,7 @@ class AppTypography {
       fontFamilyFallback: isKhmer ? khmerBodyFallback : englishBodyFallback,
       fontSize: fontSize,
       fontWeight: fontWeight,
-      height: height ?? (isKhmer ? 1.55 : 1.45),
+      height: height ?? (isKhmer ? 1.60 : 1.50),
       color: color ?? const Color(0xFF334155),
     );
   }
@@ -80,9 +80,9 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontBattambang : fontInter,
       fontFamilyFallback: isKhmer ? khmerBodyFallback : englishBodyFallback,
-      fontSize: 13.0,
+      fontSize: 15.5,
       fontWeight: FontWeight.w400,
-      height: isKhmer ? 1.5 : 1.4,
+      height: isKhmer ? 1.55 : 1.45,
       color: color ?? const Color(0xFF475569),
     );
   }
@@ -90,7 +90,7 @@ class AppTypography {
   /// Interactive button label (Kantumruy Pro for Khmer)
   static TextStyle button({
     required bool isKhmer,
-    double fontSize = 13.5,
+    double fontSize = 16.0,
     FontWeight fontWeight = FontWeight.w600,
     Color? color,
   }) {
@@ -113,7 +113,7 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontKantumruyPro : fontInter,
       fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
-      fontSize: 12.0,
+      fontSize: 14.5,
       fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
       height: 1.3,
       color: color ?? (isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF334155)),
@@ -128,7 +128,7 @@ class AppTypography {
     return TextStyle(
       fontFamily: isKhmer ? fontKantumruyPro : fontInter,
       fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
-      fontSize: 11.5,
+      fontSize: 13.5,
       fontWeight: FontWeight.w600,
       height: 1.25,
       color: color,
@@ -138,7 +138,7 @@ class AppTypography {
   /// Subtitle or secondary caption
   static TextStyle caption({
     required bool isKhmer,
-    double fontSize = 12.0,
+    double fontSize = 14.0,
     Color? color,
   }) {
     return TextStyle(
@@ -146,8 +146,81 @@ class AppTypography {
       fontFamilyFallback: isKhmer ? khmerBodyFallback : englishBodyFallback,
       fontSize: fontSize,
       fontWeight: FontWeight.w400,
-      height: isKhmer ? 1.45 : 1.35,
+      height: isKhmer ? 1.50 : 1.40,
       color: color ?? const Color(0xFF64748B),
+    );
+  }
+
+  /// Conversational dialogue message bubble text (M4 gameplay)
+  static TextStyle chatMessage({
+    required bool isKhmer,
+    required bool isUser,
+    Color? color,
+  }) {
+    return TextStyle(
+      fontFamily: isKhmer ? fontBattambang : fontInter,
+      fontFamilyFallback: isKhmer ? khmerBodyFallback : englishBodyFallback,
+      fontSize: 16.5,
+      fontWeight: FontWeight.w400,
+      height: isKhmer ? 1.60 : 1.50,
+      color: color ?? (isUser ? Colors.white : const Color(0xFF0F172A)),
+    );
+  }
+
+  /// Interactive decision choice card text (M4 gameplay)
+  static TextStyle choiceText({
+    required bool isKhmer,
+    Color? color,
+  }) {
+    return TextStyle(
+      fontFamily: isKhmer ? fontKantumruyPro : fontInter,
+      fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
+      fontSize: 16.5,
+      fontWeight: FontWeight.w600,
+      height: 1.38,
+      color: color ?? const Color(0xFF0F172A),
+    );
+  }
+
+  /// Educational outcome feedback title (M4 gameplay)
+  static TextStyle feedbackTitle({
+    required bool isKhmer,
+    required Color color,
+  }) {
+    return TextStyle(
+      fontFamily: isKhmer ? fontKantumruyPro : fontInter,
+      fontFamilyFallback: isKhmer ? khmerHeadingFallback : englishHeadingFallback,
+      fontSize: 19.0,
+      fontWeight: FontWeight.w700,
+      height: 1.35,
+      color: color,
+    );
+  }
+
+  /// Educational feedback explanation body (M4 gameplay)
+  static TextStyle feedbackBody({
+    required bool isKhmer,
+    Color? color,
+  }) {
+    return TextStyle(
+      fontFamily: isKhmer ? fontBattambang : fontInter,
+      fontFamilyFallback: isKhmer ? khmerBodyFallback : englishBodyFallback,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+      height: isKhmer ? 1.60 : 1.50,
+      color: color ?? const Color(0xFF1E293B),
+    );
+  }
+
+  /// Big score percentage display (M4 completion screen)
+  static TextStyle scoreDisplay({Color? color}) {
+    return TextStyle(
+      fontFamily: fontInter,
+      fontFamilyFallback: englishHeadingFallback,
+      fontSize: 36.0,
+      fontWeight: FontWeight.w800,
+      height: 1.2,
+      color: color ?? const Color(0xFF1E3A8A),
     );
   }
 }

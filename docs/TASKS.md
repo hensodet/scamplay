@@ -1,6 +1,6 @@
 # Task register
 
-**Current authorization: M3 — BILINGUAL SCENARIO LIBRARY UI, ILLUSTRATED CARDS, AND SCENARIO DISCOVERY (COMPLETED & VERIFIED)**
+**Current authorization: Phase A (Typography & Translation Adjustments) & Milestone M4 (First Playable Interactive Scenario Engine) — IMPLEMENTATION COMPLETED (AWAITING MANUAL HANDSET & TEST VERIFICATION)**
 
 - [x] M0 audit all starter documents for inconsistent scope.
 - [x] M0 confirm minimum technical schema approach and backend read path.
@@ -69,7 +69,20 @@
 - [x] M3 Layout & Font Remediation: Replaced rigid `ScenarioCardWidget` footer `Row` with adaptive `Wrap` layout, eliminating the 15px RenderFlex overflow on narrow 320px viewports.
 - [x] M3 Layout & Font Remediation: Replaced internal milestone terms in user-facing UI with user-centric actions: `លេង (នឹងមកដល់ឆាប់ៗ)` / `Play (Coming Soon)` and `អាចមើលជាមុនបាន` / `Preview Available`.
 - [x] M3 Layout & Font Remediation: Expanded regression test suite in `scenario_library_test.dart` to 8 tests (including 320px narrow viewport, 1.5x accessibility text scaling, and multi-dimensional illustration scaling suite) asserting zero rendering exceptions.
-- [ ] Post-M3 Pending Content Migration: Update remote Supabase and local seed category localization for `cat-1` (`account_takeover`) from «ការបន្លំដណ្ដើមគណនី» to preferred standardized «ការលួចយកគណនី» in the next authorized content migration.
-- [ ] Obtain written user approval for M4 (First Playable Interactive Scenario Engine).
+- [x] Phase A: Standardize Account Takeover category terminology universally to «ការលួចយកគណនី» (excluding «ការដណ្តើមគណនី», «ការដណ្ដើមគណនី», «ការបន្លំដណ្ដើមគណនី»).
+- [x] Phase A: Prepare idempotent development database migration for category title `cat-1` (`supabase/migrations/20261118000004_update_account_takeover_category_khmer.sql`) with documented rollback.
+- [x] Phase A: Increase typography sizes across mobile UI (`app_typography.dart`) with enhanced readability for Khmer (Kantumruy Pro, Battambang) and English (Inter) at 1.55-1.60 line heights.
+- [x] Phase A: Update Scenario Library card actions, detail screen, and coming-soon sheet typography and spacing.
+- [x] M4: Author type-safe gameplay models (`GameplaySafetyCategory`, `ChatMessage`, `GameplayDecisionOption`, `GameplayStep`, `GameplayHistoryRecord`, `GameplaySessionState`) in `apps/mobile/lib/data/models/gameplay_models.dart`.
+- [x] M4: Implement interactive 4-stage Telegram Account Takeover narrative engine (`ScenarioEngineService`) with realistic social engineering cues, safe/caution/unsafe branching, and emergency breach recovery.
+- [x] M4: Implement offline-first SQLite session persistence in Drift `GuestAttempts` (`answersJson`, `scoreLocal`, `completed`, `completedAt`) with session restoration.
+- [x] M4: Implement interactive chat simulation UI (`ScenarioPlayScreen`) with educational warning banner, fictional contact header, linear stage progress bar, responsive chat bubbles, decision cards (>=48dp touch targets), immediate feedback overlay, and dynamic bilingual switching.
+- [x] M4: Implement completion and safety takeaways screen (`ScenarioResultScreen`) with score gauge, status badge, decision review breakdown, red flags summary, 3 golden rules, and replay/library actions.
+- [x] M4: Wire Scenario Detail Screen (`ScenarioDetailScreen`) button (`ចាប់ផ្តើមលេង` / `Start Playing`) to launch `ScenarioPlayScreen`.
+- [x] M4: Implement comprehensive automated test suite (`apps/mobile/test/gameplay_engine_test.dart` - 12 tests) covering story structure, scoring math, safe/breach branching, offline persistence, play screen interaction, result screen display, 320px narrow-viewport + 1.5x accessibility scaling in Khmer and English, results screen responsive layout, dynamic bilingual switching, and replay session resets.
+- [x] M4: Update `scenario_library_test.dart` to assert active gameplay button (`ចាប់ផ្តើមលេង`) and updated category filter (`ការលួចយកគណនី`).
+- [x] Manual Host Verification: User verified `flutter analyze` (0 issues), `flutter test test/gameplay_engine_test.dart` (12/12 passed), full Flutter suite passed.
+- [ ] Manual Host Migration: User executes `npx supabase db push --remote` in host PowerShell to apply `20261118000004_update_account_takeover_category_khmer.sql`.
+- [x] Obtain written user approval for M4 completion and Git push to remote (`https://github.com/hensodet/scamplay.git`).
 
 Change this tracker only within the approved milestone. Mark executed tests separately from planned tests. Do not mark checkboxes until actually complete.

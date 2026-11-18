@@ -130,7 +130,7 @@ class ComingSoonSheet extends StatelessWidget {
                         : 'This scenario is currently undergoing pedagogical review and interactive storyline design. It will be playable in an upcoming release.',
                     style: AppTypography.body(
                       isKhmer: isKhmer,
-                      fontSize: 12.5,
+                      fontSize: 15.0,
                       color: const Color(0xFF334155),
                     ),
                   ),
@@ -143,7 +143,7 @@ class ComingSoonSheet extends StatelessWidget {
           // Dismiss Button (Kantumruy Pro)
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 50,
             child: ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
               style: ElevatedButton.styleFrom(
@@ -158,7 +158,7 @@ class ComingSoonSheet extends StatelessWidget {
                 isKhmer ? 'យល់ព្រម' : 'Got it',
                 style: AppTypography.button(
                   isKhmer: isKhmer,
-                  fontSize: 14.5,
+                  fontSize: 16.5,
                   color: Colors.white,
                 ),
               ),
