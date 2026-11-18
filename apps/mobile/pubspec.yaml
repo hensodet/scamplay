@@ -28,3 +28,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: KantumruyPro
+      fonts:
+        - asset: assets/fonts/KantumruyPro-Variable.ttf
+
+    - family: Battambang
+      fonts:
+        - asset: assets/fonts/Battambang-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Battambang-Bold.ttf
+          weight: 700
+
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf

@@ -47,6 +47,17 @@ Completed in M3:
     3. Telegram Scenario Preview / Detail Screen (`scamplay_m3_device_detail_preview.png`).
     4. Coming Soon Bottom Sheet Modal (`scamplay_m3_device_coming_soon_sheet.png`).
     5. Offline Library State in Airplane Mode (`scamplay_m3_device_offline_library.png`).
+- Completed in M3 UI/UX Refinement:
+  - Khmer Terminology Standardization: Adopted «សេណារីយ៉ូ» universally across all UI elements, with preferred terms «បណ្ណាល័យសេណារីយ៉ូ», «សេណារីយ៉ូឆបោក», «ជ្រើសរើសសេណារីយ៉ូ», «ព័ត៌មានលម្អិតអំពីសេណារីយ៉ូ», «មើលជាមុន», «អាចមើលជាមុនបាន», «នឹងមកដល់ឆាប់ៗ», «ទាំងអស់», and «ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ».
+  - Typography & Readability: Reduced excessive bold weighting on Khmer body texts to regular `FontWeight.w400` with comfortable line height (1.35 - 1.45).
+  - Navigation & AppBar: Fixed portrait title truncation by introducing compact brand title `ScamPlay` in AppBar, moving the page title into the body, and ensuring all controls have minimum 48x48 dp touch targets.
+  - Informational Disclaimers & Status Banners: Reduced vertical footprint of educational disclaimer to a compact informational banner; clarified offline availability vs active synchronization state.
+  - Descriptive Vector Illustrations: Designed 4 rich, recognizable vector scenes for each category (suspicious OTP request chat, e-commerce slashed price storefront, fraudulent bank incoming call with classical pillar, and high-risk soaring investment chart).
+  - Detail Screen & Modal Polish: Enhanced spacing, section hierarchy, objective check icons, step cards, and accessibility semantics.
+  - Final Font System Architecture: Bundled official SIL OFL fonts (`Kantumruy Pro` for headings, `Battambang` for body text, `Inter` for English) in `apps/mobile/assets/fonts/` with license texts; established centralized `AppTypography` with robust fallback chains.
+  - RenderFlex Layout Remediation: Completely resolved all horizontal and vertical overflows across `ScenarioCoverIllustration` via pure vector `CustomPainter` (`_CategoryScenePainter`), and resolved the 15px narrow-viewport card footer overflow in `ScenarioCardWidget` via adaptive `Wrap` layout.
+  - User-Facing Terminology Clean-Up: Removed internal milestone terms ("M3", "M4") from user UI, using `លេង (នឹងមកដល់ឆាប់ៗ)` / `Play (Coming Soon)` and `អាចមើលជាមុនបាន` / `Preview Available`.
+  - Regression Test Suite: Expanded `scenario_library_test.dart` to 8 tests, explicitly testing 320px narrow mobile viewports, 1.5x accessibility text scaling, and multi-dimensional illustration scaling with `expect(tester.takeException(), isNull)`.
 
 Completed in M2B:
 - Local Drift 2.31 SQLite Architecture (8 modular tables).
@@ -54,6 +65,7 @@ Completed in M2B:
 - SyncService for atomic, read-only PostgREST synchronization from Supabase development database `scamplay-dev`.
 
 Pending actions:
+- Next authorized content migration: Update remote Supabase and local seed category localization for `cat-1` (`account_takeover`) from «ការបន្លំដណ្ដើមគណនី» to preferred standardized «ការលួចយកគណនី» without mutating the remote database in M3.
 - Awaiting user review of M3 completion report and explicit written approval before proceeding to M4 (First Playable Interactive Scenario Engine).
 
 Next gate: M4 Approval (First Playable Interactive Scenario Engine: step evaluation, decision branching, local provisional scoring, instant feedback).

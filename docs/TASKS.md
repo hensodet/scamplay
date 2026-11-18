@@ -59,6 +59,17 @@
 - [x] M3 Static analysis: `flutter analyze` returned 0 issues.
 - [x] M3 Build verification: `flutter build apk --debug` succeeded in 94.5s.
 - [x] M3 Handset verification on physical device ALI NX1: 5 screenshots captured (Khmer library, English library, Telegram preview screen, Coming Soon bottom sheet, and Airplane Mode offline cold-start).
+- [x] M3 UI/UX Refinement: Apply permanent terminology decision («សេណារីយ៉ូ», «បណ្ណាល័យសេណារីយ៉ូ», «សេណារីយ៉ូឆបោក», «ជ្រើសរើសសេណារីយ៉ូ», «ព័ត៌មានលម្អិតអំពីសេណារីយ៉ូ», «មើលជាមុន», «អាចមើលជាមុនបាន», «នឹងមកដល់ឆាប់ៗ», «ទាំងអស់», «ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ»).
+- [x] M3 UI/UX Refinement: Compact brand title `ScamPlay` in AppBar preventing portrait truncation; improved touch targets (>= 48dp).
+- [x] M3 UI/UX Refinement: Compact informational educational disclaimer banner and accurate offline/last-synced status indicator.
+- [x] M3 UI/UX Refinement: Rich, rights-neutral vector illustration scenes for 4 categories (Account Takeover OTP request chat, Fake Storefront slashed price window, Bank Impersonation incoming call, Fake Investment +300% soaring chart).
+- [x] M3 UI/UX Refinement: Enhanced Scenario Detail screen and Coming Soon modal typography, spacing, and accessibility semantics.
+- [x] M3 Layout & Font Remediation: Bundled official SIL OFL fonts (`KantumruyPro-Variable.ttf`, `Battambang-Regular.ttf`, `Battambang-Bold.ttf`, `Inter-Variable.ttf`) and established centralized `AppTypography` system.
+- [x] M3 Layout & Font Remediation: Replaced fragile nested Row/Column illustration layouts with pure CustomPainter vector scenes (`_CategoryScenePainter`), mathematically eliminating all RenderFlex overflows across all viewport widths, heights, and text scaling levels.
+- [x] M3 Layout & Font Remediation: Replaced rigid `ScenarioCardWidget` footer `Row` with adaptive `Wrap` layout, eliminating the 15px RenderFlex overflow on narrow 320px viewports.
+- [x] M3 Layout & Font Remediation: Replaced internal milestone terms in user-facing UI with user-centric actions: `លេង (នឹងមកដល់ឆាប់ៗ)` / `Play (Coming Soon)` and `អាចមើលជាមុនបាន` / `Preview Available`.
+- [x] M3 Layout & Font Remediation: Expanded regression test suite in `scenario_library_test.dart` to 8 tests (including 320px narrow viewport, 1.5x accessibility text scaling, and multi-dimensional illustration scaling suite) asserting zero rendering exceptions.
+- [ ] Post-M3 Pending Content Migration: Update remote Supabase and local seed category localization for `cat-1` (`account_takeover`) from «ការបន្លំដណ្ដើមគណនី» to preferred standardized «ការលួចយកគណនី» in the next authorized content migration.
 - [ ] Obtain written user approval for M4 (First Playable Interactive Scenario Engine).
 
 Change this tracker only within the approved milestone. Mark executed tests separately from planned tests. Do not mark checkboxes until actually complete.

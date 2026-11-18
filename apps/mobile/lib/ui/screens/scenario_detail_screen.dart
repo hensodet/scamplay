@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/scenario_models.dart';
 import '../../data/repositories/content_repository.dart';
+import '../theme/app_typography.dart';
 import '../widgets/scenario_cover_illustration.dart';
 
 class ScenarioDetailScreen extends StatefulWidget {
@@ -62,21 +63,28 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isKhmer ? 'សេចក្តីលម្អិតមេរៀន' : 'Scenario Preview',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          isKhmer ? 'ព័ត៌មានលម្អិតអំពីសេណារីយ៉ូ' : 'Scenario Details',
+          style: AppTypography.pageTitle(isKhmer: isKhmer, color: const Color(0xFF0F172A)),
         ),
         actions: [
-          TextButton.icon(
-            icon: const Icon(Icons.language),
-            label: Text(
-              isKhmer ? 'English' : 'ភាសាខ្មែរ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              ),
+              icon: const Icon(Icons.language, size: 18),
+              label: Text(
+                isKhmer ? 'English' : 'ភាសាខ្មែរ',
+                style: AppTypography.button(isKhmer: isKhmer, fontSize: 13),
+              ),
+              onPressed: () {
+                widget.onLocaleChanged(
+                  isKhmer ? const Locale('en') : const Locale('km'),
+                );
+              },
             ),
-            onPressed: () {
-              widget.onLocaleChanged(
-                isKhmer ? const Locale('en') : const Locale('km'),
-              );
-            },
           ),
         ],
       ),
@@ -85,7 +93,8 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
           : _detail == null
               ? Center(
                   child: Text(
-                    isKhmer ? 'រកមិនឃើញទិន្នន័យមេរៀនទេ' : 'Scenario not found',
+                    isKhmer ? 'រកមិនឃើញទិន្នន័យសេណារីយ៉ូទេ' : 'Scenario not found',
+                    style: AppTypography.caption(isKhmer: isKhmer),
                   ),
                 )
               : SingleChildScrollView(
@@ -93,7 +102,7 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Hero Illustration
+                      // Hero Illustration (Responsive)
                       ScenarioCoverIllustration(
                         categorySlug: widget.categorySlug,
                         height: 160,
@@ -106,29 +115,28 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
+                              color: const Color(0xFFEFF6FF),
                               borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: Colors.blue.shade300),
+                              border: Border.all(color: const Color(0xFF93C5FD)),
                             ),
                             child: Text(
-                              isKhmer ? 'ដំណើរការក្នុង M4' : 'Playable after M4',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue.shade900,
+                              isKhmer ? 'អាចមើលជាមុនបាន' : 'Preview Available',
+                              style: AppTypography.statusBadge(
+                                isKhmer: isKhmer,
+                                color: const Color(0xFF1E3A8A),
                               ),
                             ),
                           ),
                           const SizedBox(width: 8),
                           Row(
                             children: [
-                              Icon(Icons.schedule, size: 14, color: Colors.grey.shade600),
+                              const Icon(Icons.schedule, size: 14, color: Color(0xFF64748B)),
                               const SizedBox(width: 4),
                               Text(
                                 isKhmer
                                     ? '${_detail!.estimatedMinutes} នាទី'
                                     : '${_detail!.estimatedMinutes} mins',
-                                style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                style: AppTypography.caption(isKhmer: isKhmer),
                               ),
                             ],
                           ),
@@ -136,42 +144,32 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                       ),
                       const SizedBox(height: 12),
 
-                      // Title
+                      // Scenario Title (Kantumruy Pro)
                       Text(
                         _detail!.title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          height: 1.3,
-                        ),
+                        style: AppTypography.pageTitle(isKhmer: isKhmer),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
 
-                      // Intro
+                      // Intro Story Callout (Battambang for Khmer body)
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade200),
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
                         ),
                         child: Text(
                           _detail!.intro,
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.5,
-                            color: Colors.grey.shade800,
-                          ),
+                          style: AppTypography.body(isKhmer: isKhmer),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 22),
 
-                      // Learning Objectives
+                      // Learning Objectives Heading (Kantumruy Pro)
                       Text(
-                        isKhmer ? 'អ្វីដែលអ្នកនឹងរៀន' : 'What you will learn',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        isKhmer ? 'អ្វីដែលអ្នកនឹងរៀន' : 'Learning Objectives',
+                        style: AppTypography.sectionHeading(isKhmer: isKhmer),
                       ),
                       const SizedBox(height: 10),
                       _buildObjectiveItem(
@@ -192,53 +190,50 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                             ? 'វិធីផ្ទៀងផ្ទាត់ដោយផ្ទាល់តាមមធ្យោបាយឯករាជ្យក្រៅពីឆាតដែលគួរឱ្យសង្ស័យ'
                             : 'Techniques to verify identity directly outside the suspicious messaging channel.',
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 22),
 
-                      // Scenario Steps Preview
+                      // Scenario Steps Preview (Kantumruy Pro heading)
                       Text(
                         isKhmer
-                            ? 'រចនាសម្ព័ន្ធមេរៀន (${_detail!.steps.length} ជំហាន)'
-                            : 'Lesson Structure (${_detail!.steps.length} steps)',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            ? 'រចនាសម្ព័ន្ធសេណារីយ៉ូ (${_detail!.steps.length} ជំហាន)'
+                            : 'Scenario Structure (${_detail!.steps.length} steps)',
+                        style: AppTypography.sectionHeading(isKhmer: isKhmer),
                       ),
                       const SizedBox(height: 10),
                       ..._detail!.steps.map(_buildStepCard),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 22),
 
-                      // Closing Advice
+                      // Closing Safety Advice (Battambang body)
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.amber.shade50,
+                          color: const Color(0xFFFFFBEB),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.amber.shade300),
+                          border: Border.all(color: const Color(0xFFFDE68A)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.lightbulb_outline, color: Colors.amber),
+                            const Icon(Icons.lightbulb_outline, color: Color(0xFFB45309), size: 20),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isKhmer ? 'សារដាស់តឿនសុវត្ថិភាព' : 'Safety Takeaway',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                      color: Colors.amber.shade900,
+                                    isKhmer ? 'គន្លឹះសុវត្ថិភាព' : 'Safety Tips',
+                                    style: AppTypography.sectionHeading(
+                                      isKhmer: isKhmer,
+                                      color: const Color(0xFF78350F),
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     _detail!.closingSummary,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      height: 1.4,
-                                      color: Colors.amber.shade900,
+                                    style: AppTypography.body(
+                                      isKhmer: isKhmer,
+                                      fontSize: 12.5,
+                                      color: const Color(0xFF78350F),
                                     ),
                                   ),
                                 ],
@@ -249,27 +244,28 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // M4 Gameplay Gate Notice Button
+                      // User-Facing Gameplay Button (Disabled until M4; NO internal milestone terms exposed)
                       SizedBox(
                         width: double.infinity,
+                        height: 50,
                         child: OutlinedButton.icon(
-                          onPressed: null, // Disabled in M3 per gate rules
-                          icon: const Icon(Icons.sports_esports_outlined),
+                          onPressed: null, // Disabled per gate rules until playable scenario is verified
+                          icon: const Icon(Icons.sports_esports_outlined, size: 20),
                           label: Text(
                             isKhmer
-                                ? 'ការអនុវត្តសាច់រឿងជាក់ស្តែង (ចាប់ផ្តើមក្នុង M4)'
-                                : 'Interactive Gameplay (Begins in M4)',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                ? 'លេង (នឹងមកដល់ឆាប់ៗ)'
+                                : 'Play (Coming Soon)',
+                            style: AppTypography.button(isKhmer: isKhmer, fontSize: 14),
                           ),
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(10),
                             ),
+                            side: const BorderSide(color: Color(0xFFCBD5E1)),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -278,16 +274,23 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
 
   Widget _buildObjectiveItem({required IconData icon, required String text}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: const Color(0xFF1E3A8A)),
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(icon, size: 16, color: const Color(0xFF1D4ED8)),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: 13, height: 1.4, color: Colors.grey.shade800),
+              style: AppTypography.body(isKhmer: isKhmer, fontSize: 13.0),
             ),
           ),
         ],
@@ -297,12 +300,12 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
 
   Widget _buildStepCard(ScenarioStepDetailModel step) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,15 +329,27 @@ class _ScenarioDetailScreenState extends State<ScenarioDetailScreen> {
               children: [
                 Text(
                   step.bodyText,
-                  style: const TextStyle(fontSize: 13, height: 1.3, fontWeight: FontWeight.w500),
+                  style: AppTypography.body(
+                    isKhmer: isKhmer,
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF0F172A),
+                  ),
                 ),
                 if (step.options.isNotEmpty) ...[
                   const SizedBox(height: 6),
-                  Text(
-                    isKhmer
-                        ? '${step.options.length} ជម្រើសការសម្រេចចិត្ត'
-                        : '${step.options.length} decision options',
-                    style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      isKhmer
+                          ? '${step.options.length} ជម្រើសការសម្រេចចិត្ត'
+                          : '${step.options.length} decision options',
+                      style: AppTypography.caption(isKhmer: isKhmer, fontSize: 11.0),
+                    ),
                   ),
                 ],
               ],

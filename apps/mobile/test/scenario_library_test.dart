@@ -9,6 +9,7 @@ import 'package:mobile/data/sync/sync_service.dart';
 import 'package:mobile/ui/screens/scenario_detail_screen.dart';
 import 'package:mobile/ui/widgets/coming_soon_sheet.dart';
 import 'package:mobile/ui/widgets/scenario_card_widget.dart';
+import 'package:mobile/ui/widgets/scenario_cover_illustration.dart';
 
 void main() {
   late AppDatabase db;
@@ -289,7 +290,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify header
-    expect(find.text('បណ្ណាល័យសេណារីយ៉ូ (Scenario Library)'), findsOneWidget);
+    expect(find.text('បណ្ណាល័យសេណារីយ៉ូ'), findsOneWidget);
 
     // Verify exactly 4 scenario cards are rendered
     expect(find.byType(ScenarioCardWidget), findsNWidgets(4));
@@ -313,8 +314,8 @@ void main() {
     }
 
     // Verify statuses
-    expect(find.text('អាចមើលគំរូបាន'), findsOneWidget);
-    expect(find.text('មកដល់ឆាប់ៗ'), findsNWidgets(3));
+    expect(find.text('អាចមើលជាមុនបាន'), findsOneWidget);
+    expect(find.text('នឹងមកដល់ឆាប់ៗ'), findsNWidgets(3));
   });
 
   testWidgets('2. Bilingual toggle preserves all 4 cards with English content', (tester) async {
@@ -376,6 +377,7 @@ void main() {
     expect(find.byKey(const ValueKey('scenario_card_scen-3')), findsOneWidget);
     expect(find.byKey(const ValueKey('scenario_card_scen-4')), findsOneWidget);
     expect((tester.widget(find.byKey(const ValueKey('scenario_card_title_scen-3'))) as Text).data, 'ល្បិចក្លែងបន្លំធនាគារ');
+    expect(find.text('បណ្ណាល័យសេណារីយ៉ូ'), findsOneWidget);
   });
 
   testWidgets('3. Tapping available scenario navigates to ScenarioDetailScreen', (tester) async {
@@ -394,10 +396,10 @@ void main() {
 
     // Verify ScenarioDetailScreen is pushed
     expect(find.byType(ScenarioDetailScreen), findsOneWidget);
-    expect(find.text('សេចក្តីលម្អិតមេរៀន'), findsOneWidget);
+    expect(find.text('ព័ត៌មានលម្អិតអំពីសេណារីយ៉ូ'), findsOneWidget);
     expect(find.text('អ្វីដែលអ្នកនឹងរៀន'), findsOneWidget);
-    expect(find.text('រចនាសម្ព័ន្ធមេរៀន (1 ជំហាន)'), findsOneWidget);
-    expect(find.text('ការអនុវត្តសាច់រឿងជាក់ស្តែង (ចាប់ផ្តើមក្នុង M4)'), findsOneWidget);
+    expect(find.text('រចនាសម្ព័ន្ធសេណារីយ៉ូ (1 ជំហាន)'), findsOneWidget);
+    expect(find.text('លេង (នឹងមកដល់ឆាប់ៗ)'), findsOneWidget);
   });
 
   testWidgets('4. Tapping Coming Soon card displays ComingSoonSheet modal', (tester) async {
@@ -419,7 +421,7 @@ void main() {
 
     // Verify ComingSoonSheet is displayed
     expect(find.byType(ComingSoonSheet), findsOneWidget);
-    expect(find.text('មេរៀននេះកំពុងស្ថិតក្នុងការពិនិត្យខ្លឹមសារគរុកោសល្យ និងការរចនាសាច់រឿងអន្តរកម្ម។ វានឹងត្រូវដាក់ឱ្យអនុវត្តក្នុងដំណាក់កាលបន្ទាប់។'), findsOneWidget);
+    expect(find.text('សេណារីយ៉ូនេះកំពុងស្ថិតក្នុងការពិនិត្យខ្លឹមសារគរុកោសល្យ និងការរចនាសាច់រឿងអន្តរកម្ម។ វានឹងត្រូវដាក់ឱ្យអនុវត្តក្នុងដំណាក់កាលបន្ទាប់។'), findsOneWidget);
 
     // Tap dismiss button
     await tester.tap(find.text('យល់ព្រម'));
@@ -455,5 +457,88 @@ void main() {
     // All 4 should be visible again
     expect(find.text('ល្បិចបោកយកគណនី Telegram'), findsOneWidget);
     expect(find.text('ល្បិចហាងអនឡាញក្លែងក្លាយ'), findsOneWidget);
+  });
+
+  testWidgets('6. Responsive regression: No RenderFlex overflow at narrow 320px viewport', (tester) async {
+    // Configure narrow mobile screen size (320x640)
+    tester.view.physicalSize = const Size(320 * 2, 640 * 2);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      ScamPlayApp(
+        repository: repository,
+        syncService: syncService,
+        initialLocale: const Locale('km'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Verify that all 4 cards render cleanly with zero exceptions
+    expect(find.byType(ScenarioCardWidget), findsNWidgets(4));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('7. Accessibility regression: No RenderFlex overflow under 1.5x text scale', (tester) async {
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(
+          size: Size(360, 800),
+          textScaler: TextScaler.linear(1.5),
+        ),
+        child: ScamPlayApp(
+          repository: repository,
+          syncService: syncService,
+          initialLocale: const Locale('km'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Verify that all 4 cards render cleanly under enlarged text scale
+    expect(find.byType(ScenarioCardWidget), findsNWidgets(4));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('8. ScenarioCoverIllustration renders all categories across multiple dimensions with zero exceptions', (tester) async {
+    const categories = [
+      'account_takeover',
+      'fake_online_store',
+      'bank_impersonation',
+      'fake_investment',
+      'other_fallback',
+    ];
+
+    const testDimensions = [
+      Size(280, 110), // Modal thumbnail on narrow device
+      Size(320, 135), // Card cover on 320dp device
+      Size(360, 135), // Card cover on standard device
+      Size(400, 160), // Scenario detail hero
+      Size(800, 180), // Landscape tablet
+    ];
+
+    for (final slug in categories) {
+      for (final dim in testDimensions) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: dim.width,
+                  height: dim.height,
+                  child: ScenarioCoverIllustration(
+                    categorySlug: slug,
+                    height: dim.height,
+                    width: dim.width,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull, reason: 'Failed for slug: $slug at dimension: $dim');
+      }
+    }
   });
 }

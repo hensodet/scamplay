@@ -32,9 +32,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify initial Khmer title and switcher
-    expect(find.text('ScamPlay — សុវត្ថិភាពឌីជីថល'), findsOneWidget);
+    expect(find.text('ScamPlay'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
-    expect(find.text('បណ្ណាល័យសេណារីយ៉ូ (Scenario Library)'), findsOneWidget);
+    expect(find.text('បណ្ណាល័យសេណារីយ៉ូ'), findsOneWidget);
 
     // Initial preference in DB should be default 'km'
     expect(await repository.getLanguagePreference(), equals('km'));
@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify English UI
-    expect(find.text('ScamPlay — Digital Safety'), findsOneWidget);
+    expect(find.text('ScamPlay'), findsOneWidget);
     expect(find.text('ភាសាខ្មែរ'), findsOneWidget);
     expect(find.text('Scenario Library'), findsOneWidget);
 
@@ -56,7 +56,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify Khmer UI restored
-    expect(find.text('ScamPlay — សុវត្ថិភាពឌីជីថល'), findsOneWidget);
+    expect(find.text('ScamPlay'), findsOneWidget);
     expect(await repository.getLanguagePreference(), equals('km'));
   });
 }
